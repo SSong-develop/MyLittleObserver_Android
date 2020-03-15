@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_person_outline_black_24dp"
+        android:background="@drawable/profile_background"
+        android:layout_centerInParent="true"
+        android:id="@+id/profile"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/setting"
+        android:src="@drawable/ic_settings_black_24dp"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/add"
+        android:src="@drawable/ic_add_black_24dp"/>
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_above="@+id/profile"
+        android:layout_marginBottom="10dp"
+        android:layout_centerInParent="true"
+        android:text="PROFILE"/>
+
+    <Button
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile"
+        android:id="@+id/profile_change"
+        android:padding="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_centerInParent="true"
+        android:drawableLeft="@drawable/ic_group_add_black_24dp"
+        android:drawablePadding="3dp"
+        android:textStyle="bold"
+        android:background="@drawable/button_background"
+        android:text="프로필 변경" />
+
+    <Button
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/list"
+        android:text="음성 리스트"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:drawableLeft="@drawable/ic_playlist_play_black_24dp"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/profile_change"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
