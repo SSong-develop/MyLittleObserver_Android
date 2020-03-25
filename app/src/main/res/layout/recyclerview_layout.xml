@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_image"
+        android:src="@drawable/audiotrack_white"
+        android:background="@color/mainColor" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:text="데시벨이 높음"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="5dp"
+            android:textSize="17dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:padding="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/heartrate"
+                android:textColor="@android:color/holo_red_light"
+                android:text="심박수 :"
+                android:layout_marginRight="5dp"
+                android:textStyle="bold"
+                android:layout_below="@id/title" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/heartrate_number"
+                android:hint="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/decibel"
+                android:textColor="@android:color/holo_blue_light"
+                android:text="데시벨 :"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:textStyle="bold"
+                android:layout_below="@id/title" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/decibel_number"
+                android:hint="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:id="@+id/warning"
+                android:textColor="@android:color/holo_orange_light"
+                android:text="위험단어 :"
+                android:textStyle="bold"
+                android:layout_below="@id/title" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/warningword"
+                android:hint="안녕"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date"
+            android:text="2020년 3월 12일"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp" />
+    </RelativeLayout>
+</LinearLayout>

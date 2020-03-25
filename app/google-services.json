@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "518462431882",
+    "firebase_url": "https://mylittleobserver.firebaseio.com",
+    "project_id": "mylittleobserver",
+    "storage_bucket": "mylittleobserver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518462431882:android:699af896e2b5c34b474373",
+        "android_client_info": {
+          "package_name": "com.example.mylittleobserver_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518462431882-p1tksr3emgi97lcfj2dkl449c9ofjjq7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mylittleobserver_android",
+            "certificate_hash": "d5bee78b4c19ad07a86fc8fb80027c7ae9c3b8ca"
+          }
+        },
+        {
+          "client_id": "518462431882-7j0sl4hf1aes0bccrdo0tr8ut09vivot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1otthcboF5WGm70AocVr6LwZkA0gnMPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518462431882-7j0sl4hf1aes0bccrdo0tr8ut09vivot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
