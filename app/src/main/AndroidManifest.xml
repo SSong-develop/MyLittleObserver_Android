@@ -28,29 +28,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activities.MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
-
-        <activity android:name=".Activities.AddDeviceActivity">
+        <activity android:name=".Activities.AddDeviceActivity"
+            android:theme="@style/AddDeviceTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
         </activity>
-        <activity android:name=".Activities.AudioActivity">
+        <activity android:name=".Activities.AudioPlayerActivity"
+            android:theme="@style/AudioPlayerTheme">
 
         </activity>
-        <activity android:name=".Activities.AudioPlayerActivity">
-
-        </activity>
-        <activity android:name=".Activities.SettingActivity"
-            android:theme="@style/SettingTheme">
-
-        </activity>
-        <activity android:name=".Activities.TestActivity">
+        <activity android:name=".Activities.MainActivity"
+            android:theme="@style/AudioPlayerTheme">
         </activity>
     </application>
 </manifest>

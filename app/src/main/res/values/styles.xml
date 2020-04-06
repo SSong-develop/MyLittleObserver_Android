@@ -24,6 +24,17 @@
 
     </style>
 
+    <style name="AudioPlayerTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!--using Color-->
+
+    </style>
+
+    <style name="AddDeviceTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!--using Color-->
+
+    </style>
+
+
     <style name="Toolbar" parent="AppTheme">
         <!--Toolbar Title Color-->
         <item name="android:textColorPrimary">@android:color/white</item>

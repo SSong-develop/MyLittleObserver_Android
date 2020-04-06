@@ -11,15 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.example.mylittleobserver_android.Activities.TestActivity;
+import com.example.mylittleobserver_android.Activities.MainActivity;
 import com.example.mylittleobserver_android.R;
 
 public class Setting_Fragment extends Fragment {
-    TestActivity activity;
+    MainActivity activity;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (TestActivity)getActivity();
+        activity = (MainActivity)getActivity();
     }
 
     @Nullable

@@ -1,6 +1,5 @@
 package com.example.mylittleobserver_android.Fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mylittleobserver_android.Activities.AudioActivity;
 import com.example.mylittleobserver_android.Activities.AudioPlayerActivity;
-import com.example.mylittleobserver_android.Activities.TestActivity;
+import com.example.mylittleobserver_android.Activities.MainActivity;
 import com.example.mylittleobserver_android.Adapter.AudioAdapter;
 import com.example.mylittleobserver_android.Model.RecyclerViewItem;
 import com.example.mylittleobserver_android.R;
@@ -26,11 +24,11 @@ import com.example.mylittleobserver_android.R;
 import java.util.ArrayList;
 
 public class Audio_Fragment extends Fragment {
-    TestActivity activity;
+    MainActivity activity;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (TestActivity)getActivity();
+        activity = (MainActivity)getActivity();
     }
 
     private ArrayList<RecyclerViewItem> mlist = new ArrayList<>();

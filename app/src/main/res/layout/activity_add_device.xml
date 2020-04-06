@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.appcompat.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/AddDeviceToolbar"
@@ -19,35 +20,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/Device_num"
-            android:layout_width="200dp"
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:hint="기기 고유번호"
-            android:textColorHint="@android:color/darker_gray"
-            android:textSize="20dp"
-            android:drawableLeft="@drawable/mode_edit_black"/>
+            android:id="@+id/wifi_connect"
+            android:src="@drawable/wifi_black"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"/>
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bluetooth_connect"
+            android:src="@drawable/bluetooth_black"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/device"
+            android:src="@drawable/mode_edit_black"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"/>
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_device"
-        android:layout_below="@+id/Device_num"
-        android:padding="8dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/audio_button_background"
-        android:drawableLeft="@drawable/devices_white"
-        android:text="추가"
-        android:textColor="@android:color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,10 +55,10 @@
         android:background="@android:color/darker_gray"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/device_recyclerview"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testText"/>
 
     </LinearLayout>
 
