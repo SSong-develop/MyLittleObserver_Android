@@ -1,18 +1,18 @@
 package com.example.mylittleobserver_android.Model;
 
-public class RecyclerViewItem {
+public class MainRecyclerViewItem {
     String Title;
     String Date;
     String Heartrate;
     String Decibel;
     String Warningword;
 
-    public RecyclerViewItem()
+    public MainRecyclerViewItem()
     {
 
     }
 
-    public RecyclerViewItem(String title, String date, String heartRate, String decibel, String warningWord) {
+    public MainRecyclerViewItem(String title, String date, String heartRate, String decibel, String warningWord) {
         this.Title = title;
         this.Date = date;
         this.Heartrate = heartRate;

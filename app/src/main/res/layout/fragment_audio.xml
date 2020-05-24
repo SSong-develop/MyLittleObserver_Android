@@ -18,7 +18,7 @@
         app:theme="@style/Toolbar"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_fragment"
+        android:id="@+id/group_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/audioToolbar_fragment"

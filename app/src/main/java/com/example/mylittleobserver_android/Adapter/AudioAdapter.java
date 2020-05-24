@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mylittleobserver_android.Model.RecyclerViewItem;
+import com.example.mylittleobserver_android.Model.MainRecyclerViewItem;
 import com.example.mylittleobserver_android.R;
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
         this.mLongListener = listener;
     }
 
-    private ArrayList<RecyclerViewItem> mlist = null;
+    private ArrayList<MainRecyclerViewItem> mlist = null;
     Context context;
 
 
@@ -81,7 +81,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
         }
     }
 
-    public AudioAdapter(ArrayList<RecyclerViewItem> list){
+    public AudioAdapter(ArrayList<MainRecyclerViewItem> list){
         this.mlist = list;
     }
 
@@ -97,7 +97,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull AudioAdapter.ViewHolder holder, int position) {
-        RecyclerViewItem item = mlist.get(position);
+        MainRecyclerViewItem item = mlist.get(position);
         String Title = item.getTitle();
         holder.title.setText(Title);
         String Date = item.getDate();
@@ -117,7 +117,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
 
     public String getTitle(int position)
     {
-        RecyclerViewItem item = mlist.get(position);
+        MainRecyclerViewItem item = mlist.get(position);
         String title = item.getTitle();
         return title;
     }

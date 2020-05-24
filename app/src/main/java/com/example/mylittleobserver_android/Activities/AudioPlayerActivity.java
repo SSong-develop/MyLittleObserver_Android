@@ -1,7 +1,10 @@
 package com.example.mylittleobserver_android.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,12 +20,32 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.mylittleobserver_android.R;
+import com.example.mylittleobserver_android.Retrofit.Service;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.Buffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 // 타이머 작업 끝내면 됨
 public class AudioPlayerActivity extends AppCompatActivity {
+    // view instance
     private MediaPlayer mediaPlayer;
     AppCompatImageButton Late;
     AppCompatImageButton pause;
@@ -43,10 +66,29 @@ public class AudioPlayerActivity extends AppCompatActivity {
     int audio_position;
     SeekBar seekBar;
 
+    // URL
+    String URL = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
+
+    // response instance
+    String fileDownloadUrl;
+
+    // Retrofit
+    Retrofit alarmControllRetrofit;
+    Service alarmControllService;
+    Call<ResponseBody> call;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_player);
+
+        // getIntent
+        Intent getIntent = getIntent();
+        Long alarmId = getIntent.getExtras().getLong("alarmId");
+        // Log.d("FuckAlarmId",alarmId.toString());
+        String url = URL + "api/v1/alarms/" + alarmId + "/" + "record/";
+        // Log.d("FuckUrl",url);
+        // Log.i("hello_FuckingAlarmId",alarmId.toString());
 
         // View
         TextView title = (TextView)findViewById(R.id.audio_text);
@@ -58,8 +100,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
         fast = (AppCompatImageButton)findViewById(R.id.fast);
         startMinute = findViewById(R.id.startminute);
         startSec = findViewById(R.id.startsec);
-
-
+        endMinute = findViewById(R.id.endminute);
+        endSec = findViewById(R.id.endsec);
 
         // toolbar
         Toolbar toolbar = (Toolbar)findViewById(R.id.audioPlayerToolbar);
@@ -69,6 +111,34 @@ public class AudioPlayerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String audioTitle = intent.getExtras().getString("SelectedTitle");
         title.setText(audioTitle);
+
+        // Retrofit
+        alarmControllRetrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        alarmControllService = alarmControllRetrofit.create(Service.class);
+        call = alarmControllService.getAlarmStatus(url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try{
+                    String result = response.body().string();
+                    JSONObject jsonObject = new JSONObject(result);
+                    fileDownloadUrl = jsonObject.getString("fileDownloadUrl");
+                    Log.v("FuckUp!",fileDownloadUrl);
+                    Log.d("END Data",result);
+                }catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
 
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -102,14 +172,19 @@ public class AudioPlayerActivity extends AppCompatActivity {
             start.setVisibility(View.INVISIBLE);
             pause.setVisibility(View.VISIBLE);
             // mediaplayer
-            mediaPlayer = MediaPlayer.create(this,R.raw.ptest);
+            try {
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setDataSource(this, Uri.parse(fileDownloadUrl));
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mediaPlayer.setLooping(false);
             mediaPlayer.start();
             int a = mediaPlayer.getDuration();
             seekBar.setMax(a);
             isPlaying = true;
             new MusicThread().start();
-            new TimerThread().start();
             startSec.setText("0"+timer_sec);
             startMinute.setText("0"+timer_minute);
         });
@@ -134,28 +209,6 @@ public class AudioPlayerActivity extends AppCompatActivity {
         fast.setOnClickListener(v -> {
 
         });
-    }
-
-    class TimerThread extends Thread {
-        boolean running = false;
-
-        @Override
-        public void run() {
-            running = true;
-            while(running){
-                timer_sec+=1;
-                if(timer_sec == 60){
-                    timer_sec = 0;
-                    timer_minute+=1;
-                }
-                try{
-                    Thread.sleep(1000);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     class MusicThread extends Thread {
@@ -188,3 +241,4 @@ public class AudioPlayerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+

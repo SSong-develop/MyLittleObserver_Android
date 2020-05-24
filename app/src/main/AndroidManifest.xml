@@ -29,7 +29,8 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".Activities.AddDeviceActivity"
-            android:theme="@style/AddDeviceTheme">
+            android:theme="@style/AddDeviceTheme"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -41,7 +42,7 @@
 
         </activity>
         <activity android:name=".Activities.MainActivity"
-            android:theme="@style/AudioPlayerTheme">
+            android:theme="@style/AddDeviceTheme">
         </activity>
     </application>
 </manifest>

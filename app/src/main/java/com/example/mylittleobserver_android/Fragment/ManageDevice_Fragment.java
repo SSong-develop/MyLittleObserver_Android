@@ -23,6 +23,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.w3c.dom.Text;
 
 public class ManageDevice_Fragment extends Fragment {
+
+    // api/v1/users/{userName}/mlos -> userName에 따라 그가 가진 mlo가 무엇인지를 알 수 있다.
+
+    // api/v1/mlos/{mloName}/alarms -> mloName에 따라 알람의 상태를 알 수 있다.
+
     MainActivity activity;
     @Override
     public void onAttach(@NonNull Context context) {

@@ -5,4 +5,7 @@
     <string name="positivedialog_message">저장</string>
     <string name="negativedialog_message">닫기</string>
     <string name="setting">설정</string>
+    <string name="nav_header_title">MLO 등록</string>
+    <string name="nav_header_subtitle">allo</string>
+    <string name="nav_header_desc">hello</string>
 </resources>
