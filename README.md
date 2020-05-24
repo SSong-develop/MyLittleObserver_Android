@@ -1,2 +1,3 @@
 # MyLittleObserver_Android
-## DeadLine 2020.06.05
+## UI
+![등록화면](C:\Users\thdgn\OneDrive\바탕 화면\등록화면.jpg)
