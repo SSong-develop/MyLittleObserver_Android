@@ -1,5 +1,6 @@
 package com.example.mylittleobserver_android.Retrofit;
 
+import com.example.mylittleobserver_android.Model.MloRegister;
 import com.example.mylittleobserver_android.Model.User;
 import com.example.mylittleobserver_android.Model.userSaveRequestDto;
 
@@ -13,6 +14,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -30,8 +32,9 @@ public interface Service {
     Call<ResponseBody> register(@Body userSaveRequestDto userSaveRequestDto);
 
     // url 동적으로 줘야함
-    @POST()
-    Call<ResponseBody> mloRegister();
+    @POST("api/v1/users/{userName}/mlos")
+    Call<ResponseBody> mloRegister(@Body MloRegister mloRegister,
+                                   @Path("userName") String username);
 
     @GET
     Call<ResponseBody> login(@Url String url);

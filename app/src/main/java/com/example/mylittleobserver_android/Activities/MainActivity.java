@@ -28,8 +28,10 @@ import com.example.mylittleobserver_android.Fragment.Audio_Fragment;
 import com.example.mylittleobserver_android.Fragment.Main_Fragment;
 import com.example.mylittleobserver_android.Fragment.ManageDevice_Fragment;
 import com.example.mylittleobserver_android.Fragment.Setting_Fragment;
+import com.example.mylittleobserver_android.Model.MloRegister;
 import com.example.mylittleobserver_android.Model.Mlos;
 import com.example.mylittleobserver_android.Model.User;
+import com.example.mylittleobserver_android.Model.mloSaveRequestDto;
 import com.example.mylittleobserver_android.R;
 import com.example.mylittleobserver_android.Retrofit.RetrofitClient;
 import com.example.mylittleobserver_android.Retrofit.Service;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     // dialog Instance
     TextInputEditText registerName;
+    TextInputEditText registerMloName;
 
     // Retrofit
     private Retrofit mloListRetrofit;
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
 
+                // mloRegister부분 이곳 조지면 됨
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
@@ -134,32 +138,39 @@ public class MainActivity extends AppCompatActivity {
                     View dialogView = getLayoutInflater().inflate(R.layout.register_mlo_register,null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setView(dialogView);
-                    builder.setTitle("기계등록").setMessage("사용자 닉네임을 적어주세요");
+                    builder.setTitle("기계등록").setMessage("사용자 닉네임과 기기이름을 적어주세요");
                     builder.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // 이부분 다시한번 생각해야함
                             String url = URL + "api/v1/users/"+ userName +"/mlos/";
                             Log.v("FuckURL",url);
                             registerName = dialogView.findViewById(R.id.register_mlo);
-                            if(TextUtils.equals(registerName.getText().toString(),"")){
-                                Toast.makeText(context, "[실패] 닉네임을 적어주세요", Toast.LENGTH_SHORT).show();
+                            registerMloName = dialogView.findViewById(R.id.register_mloName);
+                            if(TextUtils.isEmpty(registerName.getText().toString())){
+                                Toast.makeText(context, "[실패]유저이름을 적어주세요", Toast.LENGTH_SHORT).show();
                                 return;
                             }
+                            // 기기이름 적는부분 해놔야함
                             else if(!TextUtils.equals(registerName.getText().toString(),userName)){
-                                Toast.makeText(context, "[실패] 유저이름과 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "[실패]유저이름과 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             else {
-                                Retrofit mloRegister = new Retrofit.Builder()
-                                        .baseUrl(url)
+                                mloSaveRequestDto mloSaveRequestDto = new mloSaveRequestDto(mloName);
+                                MloRegister mloRegister = new MloRegister(registerMloName.getText().toString(),mloSaveRequestDto);
+                                Retrofit mloRegisterRetrofit = new Retrofit.Builder()
+                                        .baseUrl(URL)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
-                                Service mloService = mloRegister.create(Service.class);
-                                Call<ResponseBody> call = mloService.mloRegister(url);
+                                Service mloService = mloRegisterRetrofit.create(Service.class);
+                                Call<ResponseBody> call = mloService.mloRegister(mloRegister,userName);
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                                        if(!response.isSuccessful()){
+
+                                        }
 
                                     }
 

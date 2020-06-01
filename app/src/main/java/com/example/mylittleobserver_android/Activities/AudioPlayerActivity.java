@@ -178,6 +178,10 @@ public class AudioPlayerActivity extends AppCompatActivity {
             pause.setVisibility(View.VISIBLE);
             // mediaplayer
             try {
+                if(fileDownloadUrl == null){
+                    Toast.makeText(this, "파일이 없습니다", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(this, Uri.parse(fileDownloadUrl));
                 mediaPlayer.prepare();
