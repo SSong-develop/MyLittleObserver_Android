@@ -16,21 +16,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.mylittleobserver_android.Model.Mlos;
 import com.example.mylittleobserver_android.Model.User;
+import com.example.mylittleobserver_android.Model.userSaveRequestDto;
 import com.example.mylittleobserver_android.R;
-import com.example.mylittleobserver_android.Retrofit.RetrofitClient;
 import com.example.mylittleobserver_android.Retrofit.Service;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.List;
+import java.net.URLEncoder;
+import java.util.Base64;
+import java.util.Base64.Encoder;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,10 +39,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-/*
- Data 받는 것까지는 완벽
- 이후 이걸 fragment까지 옮기고 뿌려주었는데 그게 됐는지는 확인이 필요
+/**
+ * 등록 부분 끝!!
+ * mlo 등록 부분도 금방 끝낼 거 같음
  */
 public class AddDeviceActivity extends AppCompatActivity {
     private final String BASEURL = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
@@ -82,7 +81,7 @@ public class AddDeviceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(TextUtils.equals(userName_et.getText().toString(),"")){
-                    Toast.makeText(AddDeviceActivity.this, "Please enter yout name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddDeviceActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else if(TextUtils.equals(userId_et.getText().toString(),"")){
@@ -95,7 +94,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                             .build();
                     service = loginRetrofit.create(Service.class);
                     String url = BASEURL + "api/v1/users/" + userName_et.getText().toString();
-                    Log.d("data!!",url);
                     Call<ResponseBody> call = service.login(url);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -183,31 +181,32 @@ public class AddDeviceActivity extends AppCompatActivity {
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                userSaveRequestDto user = new userSaveRequestDto(registerName.getText().toString());
+                Log.d("TAGG!",user.getUsername());
                 Retrofit registerRetrofit = new Retrofit.Builder()
                         .baseUrl(BASEURL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 Service registerService = registerRetrofit.create(Service.class);
-                Call<ResponseBody> registerCall = registerService.register();
+                Call<ResponseBody> registerCall = registerService.register(user);
                 registerCall.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
                             if (!response.isSuccessful()) {
                                 if (response.code() == 400){
-                                    Toast.makeText(AddDeviceActivity.this, "Register Fail!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddDeviceActivity.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                else if(response.code() == 200){
-                                    Toast.makeText(AddDeviceActivity.this, "Register Success!", Toast.LENGTH_SHORT).show();
-                                }
                                 else{
-                                    Toast.makeText(AddDeviceActivity.this, "bad Gate!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddDeviceActivity.this, "BAD GATE"+"Error Code : "+response.code(), Toast.LENGTH_SHORT).show();
                                 }
-
                             }
-                            String result = response.body().string();
-                            Log.d("edd", result);
+                            else {
+                                String result = response.body().string();
+                                JSONObject jsonObject = new JSONObject(result);
+                                Toast.makeText(AddDeviceActivity.this, jsonObject.getString("message")+"   "+"회원 아이디 : "+jsonObject.getInt("id"), Toast.LENGTH_SHORT).show();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

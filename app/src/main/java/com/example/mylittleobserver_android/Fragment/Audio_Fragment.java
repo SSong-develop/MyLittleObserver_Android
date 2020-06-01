@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,16 +42,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Audio_Fragment extends Fragment {
     // 알림 리스트 가져오는 인터페이스를 mainActivity로 변경해
 
+    // Instance
     private MainActivity activity;
     private ArrayList<Section> sectionList = new ArrayList<>();
-    private ArrayList<InsideItem> itemList = new ArrayList<>();
     private RecyclerView audioRecyclerView;
 
+    // Retrofit
     private Retrofit alarmRetrofit;
     private Service alarmService;
     private Call<ResponseBody> call;
     private Long alarmId;
 
+    // URL
     String url = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
 
     @Override
@@ -100,8 +103,6 @@ public class Audio_Fragment extends Fragment {
                         JSONArray jsonArray1 = jsonObject.getJSONArray("alarms");
 
                         ArrayList<JSONObject> listAlarm = new ArrayList<>();
-                        Log.d("Fuckkkkk", jsonArray1.getJSONObject(0).getString("date"));
-                        Log.v("lengh!!", String.valueOf(jsonArray1.length()));
 
                         // View 구성
                         for(int i = 0;i<jsonArray1.length();i++){
@@ -146,21 +147,15 @@ public class Audio_Fragment extends Fragment {
                     } // IOException
                 }
                 else {
-                    Log.d("FuckFailed",response.message());
-
+                    Toast.makeText(activity, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        // alarm화면을 이동하기 위한 것이 필요하다!
-
-
-
 
         return root;
     }
@@ -173,7 +168,7 @@ public class Audio_Fragment extends Fragment {
 
             // 이부분은 데이터형 물어보고 차차
             /*int heart = jsonObject.getInt("heart");
-            int decibel = jsonObject.getInt("decibel");*/
+            int decibel = jsonObject.getInt("decibel"); */
             String tumble = jsonObject.getString("tumble");
             String date = jsonObject.getString("date");
 

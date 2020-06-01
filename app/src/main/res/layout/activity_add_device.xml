@@ -33,7 +33,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/mloId_et"
-                android:hint="MLO_NAME"
+                android:hint="기기 번호"
                 android:inputType="number"
                 android:layout_gravity="center"/>
         </com.google.android.material.textfield.TextInputLayout>

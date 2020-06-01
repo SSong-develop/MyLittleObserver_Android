@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -123,6 +124,10 @@ public class AudioPlayerActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try{
+                    if(response.body() == null){
+                        Toast.makeText(AudioPlayerActivity.this, "파일이 없습니다 잠시만 기다려주세요", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     String result = response.body().string();
                     JSONObject jsonObject = new JSONObject(result);
                     fileDownloadUrl = jsonObject.getString("fileDownloadUrl");

@@ -42,7 +42,8 @@
 
         </activity>
         <activity android:name=".Activities.MainActivity"
-            android:theme="@style/AddDeviceTheme">
+            android:theme="@style/AddDeviceTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 </manifest>
