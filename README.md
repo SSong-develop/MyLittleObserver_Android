@@ -8,3 +8,13 @@ ScreenShots
   <img width="200" src="https://user-images.githubusercontent.com/51434873/83447981-37658c00-a48c-11ea-8f65-6353b8d947ed.png">
   <img width="200" src="https://user-images.githubusercontent.com/51434873/83448193-89a6ad00-a48c-11ea-861c-db0f44913050.png">
 </div>
+개발 상황
+---------------
+<div>
+  1. 기기 등록 부분 마무리
+  2. 기기 관리 
+  3. 설정 
+  4. FCM
+</div>
+개발 마감
+----------------
