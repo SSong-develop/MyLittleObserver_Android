@@ -1,5 +1,4 @@
 # MyLittleObserver_Android
----------------------------
 ScreenShots
 ---------------
 <div>
