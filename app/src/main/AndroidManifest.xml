@@ -22,13 +22,13 @@
     </uses-permission>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo_main"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo_main_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activities.AddDeviceActivity"
+        <activity android:name=".Activities.SplashActivity"
             android:theme="@style/AddDeviceTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -44,6 +44,10 @@
         <activity android:name=".Activities.MainActivity"
             android:theme="@style/AddDeviceTheme"
             android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity android:name=".Activities.AddDeviceActivity"
+            android:theme="@style/AddDeviceTheme">
+
         </activity>
     </application>
 </manifest>

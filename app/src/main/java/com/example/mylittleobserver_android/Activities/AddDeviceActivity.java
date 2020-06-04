@@ -75,7 +75,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         setSupportActionBar(tb);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("기기 등록");
+        getSupportActionBar().setTitle("MLO");
 
         acceptbtn.setOnClickListener(new View.OnClickListener() {
             @Override

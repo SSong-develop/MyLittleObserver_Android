@@ -1,8 +1,10 @@
 package com.example.mylittleobserver_android.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -105,6 +110,7 @@ public class Audio_Fragment extends Fragment {
                         ArrayList<JSONObject> listAlarm = new ArrayList<>();
 
                         // View 구성
+                        // 조건문만 없애놓으면 이전 코드
                         for(int i = 0;i<jsonArray1.length();i++){
                             listAlarm.add(jsonArray1.getJSONObject(i));
                             initdata(listAlarm.get(i));
@@ -162,31 +168,27 @@ public class Audio_Fragment extends Fragment {
 
     private void initdata(JSONObject jsonObject) {
         try {
-            int sectionDevider = 0;
             Long alarmId = jsonObject.getLong("alarmId");
             String stAlarmId = alarmId.toString();
 
-            // 이부분은 데이터형 물어보고 차차
-            /*int heart = jsonObject.getInt("heart");
-            int decibel = jsonObject.getInt("decibel"); */
+            String title = null;
+            String heart = jsonObject.getString("heart");
+            String decibel = jsonObject.getString("decibel");
             String tumble = jsonObject.getString("tumble");
             String date = jsonObject.getString("date");
 
-            String title = tumble;
+            // alert title
+            if(TextUtils.equals(heart,"testhigh")){
+                title = "(Test)심박수 위험";
+            } else if (TextUtils.equals(decibel,"testhigh")) {
+                title = "(Test)데시벨 위험";
+            } else if (TextUtils.equals(tumble,"testfall")){
+                title = "(Test)넘어짐";
+            }
 
-            // 살릴 부분입니다.
-            /*if(heart > decibel){
-                // heart를 title
-                title = "심박수 증가!!";
-            } else if (heart < decibel) {
-                // decibel
-                title = "데시벨 증가!!";
-            } else {
-                // 동일할 경우 넘어짐을
-                title = tumble;
-            }*/
-
-            String sectionName = "ALARMFILE_"+sectionDevider;
+            // 구현해야 할 것
+            // 초 단위에 따라서 위험한 것을 밑에 달리도록 해야한다.
+            String sectionName = "알림";
             ArrayList<InsideItem> sectionItems = new ArrayList<>();
             sectionItems.add(new InsideItem(stAlarmId,title,date));
             sectionList.add(new Section(sectionName,sectionItems));
@@ -197,29 +199,4 @@ public class Audio_Fragment extends Fragment {
         }
 
     }
-
-    /*private void initData() {
-
-        // dummy Data
-        String sectionOneName = "MLOFILE_01";
-        ArrayList<InsideItem> sectionOneItems = new ArrayList<>();
-        sectionOneItems.add(new InsideItem("심박수 감지","10:02"));
-        sectionOneItems.add(new InsideItem("데시벨 감지","10:09"));
-
-        String sectionTwoName = "MLOFILE_02";
-        ArrayList<InsideItem> sectionTwoItems = new ArrayList<>();
-        sectionTwoItems.add(new InsideItem("심박수 감지","13:16"));
-        sectionTwoItems.add(new InsideItem("데시벨 감지","13:21"));
-        sectionTwoItems.add(new InsideItem("넘어짐 감지","13:23"));
-
-        String sectionThreeName = "MLOFILE_03";
-        ArrayList<InsideItem> sectionThreeItems = new ArrayList<>();
-        sectionThreeItems.add(new InsideItem("심박수 감지","16:20"));
-        sectionThreeItems.add(new InsideItem("데시벨 감지","16:22"));
-        sectionThreeItems.add(new InsideItem("넘어짐 감지","16:26"));
-
-        sectionList.add(new Section(sectionOneName,sectionOneItems));
-        sectionList.add(new Section(sectionTwoName,sectionTwoItems));
-        sectionList.add(new Section(sectionThreeName,sectionThreeItems));
-    }*/
 }

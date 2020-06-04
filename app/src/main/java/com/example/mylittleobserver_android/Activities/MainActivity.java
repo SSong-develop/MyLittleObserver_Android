@@ -143,8 +143,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 이부분 다시한번 생각해야함
-                            String url = URL + "api/v1/users/"+ userName +"/mlos/";
-                            Log.v("FuckURL",url);
                             registerName = dialogView.findViewById(R.id.register_mlo);
                             registerMloName = dialogView.findViewById(R.id.register_mloName);
                             if(TextUtils.isEmpty(registerName.getText().toString())){
@@ -164,12 +162,15 @@ public class MainActivity extends AppCompatActivity {
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 Service mloService = mloRegisterRetrofit.create(Service.class);
-                                Call<ResponseBody> call = mloService.mloRegister(mloRegister,userName);
+                                Call<ResponseBody> call = mloService.mloRegister(mloRegister,registerName.getText().toString());
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if(!response.isSuccessful()){
-
+                                            Log.d("Fuck!!!!",response.message());
+                                        }
+                                        else {
+                                            Toast.makeText(MainActivity.this, "기기 등록 성공", Toast.LENGTH_SHORT).show();
                                         }
 
                                     }

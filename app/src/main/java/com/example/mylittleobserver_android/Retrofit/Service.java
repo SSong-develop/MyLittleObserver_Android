@@ -31,7 +31,6 @@ public interface Service {
     @POST("api/v1/users")
     Call<ResponseBody> register(@Body userSaveRequestDto userSaveRequestDto);
 
-    // url 동적으로 줘야함
     @POST("api/v1/users/{userName}/mlos")
     Call<ResponseBody> mloRegister(@Body MloRegister mloRegister,
                                    @Path("userName") String username);

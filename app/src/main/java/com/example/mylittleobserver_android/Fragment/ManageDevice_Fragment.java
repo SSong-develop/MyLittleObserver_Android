@@ -10,12 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
 import com.example.mylittleobserver_android.Activities.MainActivity;
-import com.example.mylittleobserver_android.Database.AppDatabase;
-import com.example.mylittleobserver_android.Database.User;
 import com.example.mylittleobserver_android.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,23 +38,15 @@ public class ManageDevice_Fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_manage,container,false);
+
+        // view
         MaterialButton button = root.findViewById(R.id.testbutton);
         TextInputEditText test = root.findViewById(R.id.testedit);
         TextInputEditText test1 = root.findViewById(R.id.useredit1);
-        TextView page = root.findViewById(R.id.testpage);
+        Toolbar toolbar = root.findViewById(R.id.search_toolbar);
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setTitle(" ");
 
-        final AppDatabase db = Room.databaseBuilder(activity,AppDatabase.class,"user-db")
-                .allowMainThreadQueries()
-                .build();
-
-        page.setText(db.userDao().getAll().toString());
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.userDao().insert(new User(test1.getText().toString(),test.getText().toString()));
-                page.setText(db.userDao().getAll().toString());
-            }
-        });
         return root;
     }
 
