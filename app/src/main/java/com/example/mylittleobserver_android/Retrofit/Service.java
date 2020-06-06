@@ -13,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -20,20 +21,20 @@ import retrofit2.http.Url;
 
 public interface Service {
 
-    // http://ipAddress:portNum/users
     public static final String URL = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
 
     @GET("user")
     Call<ResponseBody> getUser(@Query("mloId") int mloId);
+
     @GET("api/v1/users")
     Call<List<User>> findAll();
 
     @POST("api/v1/users")
     Call<ResponseBody> register(@Body userSaveRequestDto userSaveRequestDto);
 
+    @Headers("Accept: application/json")
     @POST("api/v1/users/{userName}/mlos")
-    Call<ResponseBody> mloRegister(@Body MloRegister mloRegister,
-                                   @Path("userName") String username);
+    Call<ResponseBody> mloRegister(@Path(value = "userName", encoded = true) String userName,@Body MloRegister mloRegister);
 
     @GET
     Call<ResponseBody> login(@Url String url);

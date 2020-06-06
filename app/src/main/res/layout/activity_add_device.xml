@@ -5,18 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/AddDeviceToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/mainColor"
-        android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/Toolbar" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,15 +16,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/mloId_et"
-                android:hint="기기 번호"
-                android:inputType="number"
-                android:layout_gravity="center"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_gravity="center"/>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,6 +46,14 @@
             android:layout_marginTop="5dp"
             android:padding="2dp"
             android:text="회원등록" />
+        <CheckBox
+            android:id="@+id/auto_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:text="자동로그인"
+            android:layout_marginTop="14dp"/>
     </LinearLayout>
 
 </LinearLayout>

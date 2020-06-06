@@ -27,6 +27,7 @@
         android:roundIcon="@mipmap/logo_main_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--Set custom default Icon. This is used when no Icon is set for incoming notification messages -->
 
         <activity android:name=".Activities.SplashActivity"
             android:theme="@style/AddDeviceTheme"
@@ -49,5 +50,13 @@
             android:theme="@style/AddDeviceTheme">
 
         </activity>
+        <service
+            android:name="FCM.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>

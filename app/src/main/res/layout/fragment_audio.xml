@@ -17,11 +17,17 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/Toolbar"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/group_recyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/audioToolbar_fragment"
-        android:layout_marginTop="0dp"
-        android:background="?attr/selectableItemBackground"/>
+        android:layout_below="@+id/audioToolbar_fragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:background="?attr/selectableItemBackground"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

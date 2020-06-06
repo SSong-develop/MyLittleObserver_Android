@@ -1,12 +1,18 @@
 package com.example.mylittleobserver_android.Adapter;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mylittleobserver_android.Model.InsideItem;
@@ -40,19 +46,25 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     {
         this.mLongListener = listener;
     }
+
     ArrayList<Section> sectionList;
+    private Context context;
 
     public MainRecyclerAdapter(ArrayList<Section> sectionList){
         this.sectionList = sectionList;
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView sectionName;
         RecyclerView childRecyclerView;
+        TextView buttonViewOption;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             sectionName = itemView.findViewById(R.id.sectionName);
             childRecyclerView = itemView.findViewById(R.id.child_recyclerview);
+            buttonViewOption = itemView.findViewById(R.id.textViewOptions);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,6 +93,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     public MainRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_row,parent,false);
         MainRecyclerAdapter.ViewHolder vh = new MainRecyclerAdapter.ViewHolder(v);
+        context = parent.getContext();
         return vh;
     }
 
@@ -94,6 +107,44 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
         ChildRecyclerAdapter childRecyclerAdapter = new ChildRecyclerAdapter(items);
         holder.childRecyclerView.setAdapter(childRecyclerAdapter);
+
+        holder.buttonViewOption.setOnClickListener(v -> {
+            //creating a popup menu
+            PopupMenu popup;
+            popup = new PopupMenu(context, holder.buttonViewOption);
+            //inflating menu from xml resource
+            popup.inflate(R.menu.options_menu);
+            //adding click listener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.delete:
+                            //handle menu1 click
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle("정말 삭제 하시나요?");
+                            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(context, "취소했습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            androidx.appcompat.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popup.show();
+        });
 
     }
 

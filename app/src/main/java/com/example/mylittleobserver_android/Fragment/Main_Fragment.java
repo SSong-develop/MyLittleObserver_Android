@@ -62,6 +62,7 @@ public class Main_Fragment extends Fragment {
         String mloName = bundle.getString("mloName");
         Long mloId = bundle.getLong("mloId");
 
+
         String color = "#000000";
 
         userName.setText(name);
