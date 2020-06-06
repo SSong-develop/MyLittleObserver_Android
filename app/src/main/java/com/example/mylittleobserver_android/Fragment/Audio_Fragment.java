@@ -115,10 +115,8 @@ public class Audio_Fragment extends Fragment {
                         result = response.body().string();
                         // Json 처리 객체
                         JSONArray jsonArray = new JSONArray(result);
-                        Log.d("Fuck_data",jsonArray.toString());
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
                         JSONArray jsonArray1 = jsonObject.getJSONArray("alarms");
-                        Log.v("jsonArray1",jsonArray1.toString());
 
                         ArrayList<JSONObject> listAlarm = new ArrayList<>();
 
@@ -178,10 +176,79 @@ public class Audio_Fragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // adapter notifyDataChanged
                 sectionList.clear();
+                alarmRetrofit = new Retrofit.Builder()
+                        .baseUrl(url)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                alarmService = alarmRetrofit.create(Service.class);
+                call = alarmService.getAlarm(_url);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        String result = null;
+                        if(response.isSuccessful()){
+                            try{
+                                result = response.body().string();
+                                // Json 처리 객체
+                                JSONArray jsonArray = new JSONArray(result);
+                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                JSONArray jsonArray1 = jsonObject.getJSONArray("alarms");
 
-                mainAdapter.notifyItemChanged(mainAdapter.getItemCount());
+                                ArrayList<JSONObject> listAlarm = new ArrayList<>();
+
+                                // View 구성
+                                for(int i = 0;i<jsonArray1.length();i++){
+                                    listAlarm.add(jsonArray1.getJSONObject(i));
+                                    initdata(listAlarm.get(i));
+                                }
+
+                                // RecyclerView
+                                audioRecyclerView = root.findViewById(R.id.group_recyclerview);
+                                mainAdapter = new MainRecyclerAdapter(sectionList);
+                                mainAdapter.setOnItemClickListener(new MainRecyclerAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View v, int pos) {
+                                        Intent intent = new Intent(activity, AudioPlayerActivity.class);
+                                        alarmId = Long.valueOf(pos)+1;
+                                        intent.putExtra("SelectedTitle",mainAdapter.getTitle(pos));
+                                        intent.putExtra("alarmId",alarmId);
+                                        // 여기를 조져야한다.
+                                        startActivity(intent);
+                                    }
+                                });
+                                mainAdapter.setOnItemLongClickListener(new MainRecyclerAdapter.OnItemLongClickListener() {
+                                    @Override
+                                    public void onItemLongClick(View v, int pos) {
+
+                                    }
+                                });
+                                audioRecyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+                                audioRecyclerView.setHasFixedSize(true);
+                                audioRecyclerView.setAdapter(mainAdapter);
+
+                                DividerItemDecoration dividerItemDecoration =
+                                        new DividerItemDecoration(audioRecyclerView.getContext(),new LinearLayoutManager(activity).getOrientation());
+                                audioRecyclerView.addItemDecoration(dividerItemDecoration);
+                                _switch = false;
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } // jsonException
+                            catch (IOException e) {
+                                e.printStackTrace();
+                            } // IOException
+                        }
+                        else {
+                            Toast.makeText(activity, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
