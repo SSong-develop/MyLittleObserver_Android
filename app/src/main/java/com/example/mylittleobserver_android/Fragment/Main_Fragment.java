@@ -1,35 +1,23 @@
 package com.example.mylittleobserver_android.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.mylittleobserver_android.Activities.MainActivity;
 import com.example.mylittleobserver_android.Model.User;
 import com.example.mylittleobserver_android.R;
-import com.example.mylittleobserver_android.Retrofit.RetrofitClient;
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Retrofit;
 
 public class Main_Fragment extends Fragment {
     TextView test1;

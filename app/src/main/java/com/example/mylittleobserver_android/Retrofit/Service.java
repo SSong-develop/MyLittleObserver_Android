@@ -3,6 +3,7 @@ package com.example.mylittleobserver_android.Retrofit;
 import com.example.mylittleobserver_android.Model.MloRegister;
 import com.example.mylittleobserver_android.Model.User;
 import com.example.mylittleobserver_android.Model.userSaveRequestDto;
+import com.example.mylittleobserver_android.Model.mloSaveRequestDto;
 
 import java.net.URL;
 import java.util.List;
@@ -34,7 +35,7 @@ public interface Service {
 
     @Headers("Accept: application/json")
     @POST("api/v1/users/{userName}/mlos")
-    Call<ResponseBody> mloRegister(@Path(value = "userName", encoded = true) String userName,@Body MloRegister mloRegister);
+    Call<ResponseBody> mloRegister(@Path("userName") String userName, @Body mloSaveRequestDto mloSaveRequestDto);
 
     @GET
     Call<ResponseBody> login(@Url String url);

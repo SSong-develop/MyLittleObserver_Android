@@ -194,11 +194,10 @@ public class MainActivity extends AppCompatActivity {
                     builder.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // 이부분 다시한번 생각해야함
-                            registerName = dialogView.findViewById(R.id.register_mlo);
-                            registerMloName = dialogView.findViewById(R.id.register_mloName);
+                            registerName = (TextInputEditText)dialogView.findViewById(R.id.register_mlo);
+                            registerMloName = (TextInputEditText)dialogView.findViewById(R.id.register_mloName);
+                            mloSaveRequestDto _mloSaveRequestDto = new mloSaveRequestDto(registerMloName.getText().toString());
                             String _registerName = registerName.getText().toString();
-                            String _registerMloName = registerMloName.getText().toString();
 
                             // Exception
                             if (TextUtils.isEmpty(registerName.getText().toString())) {
@@ -212,8 +211,7 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             } else{
                                 // mloRegister Model
-                                mloSaveRequestDto mloSaveRequestDto = new mloSaveRequestDto(_registerMloName);
-                                MloRegister _mloRegister = new MloRegister(_registerName,mloSaveRequestDto);
+                                MloRegister _mloRegister = new MloRegister(_registerName,_mloSaveRequestDto);
 
                                 // 기기 등록 api 호출
                                 mloRegisterRetrofit = new Retrofit.Builder()
@@ -221,22 +219,24 @@ public class MainActivity extends AppCompatActivity {
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 mloRegisterService = mloRegisterRetrofit.create(Service.class);
-                                mloRegisterCall = mloRegisterService.mloRegister(_registerName,_mloRegister);
+                                mloRegisterCall = mloRegisterService.mloRegister(_registerName,_mloSaveRequestDto);
                                 Log.v("Fuck_register",_registerName);
                                 Log.d("Fuck Retrofit",mloRegisterCall.toString());
                                 mloRegisterCall.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if(response.code() == 201){
-                                            Toast.makeText(context, "[성공]기기등록 성공", Toast.LENGTH_SHORT).show();
-                                        } else if(response.code() == 401){
+                                        if(!response.isSuccessful()){
                                             Toast.makeText(context, "[실패]기기등록 실패", Toast.LENGTH_SHORT).show();
-                                        } else if(response.code() == 403){
-                                            Toast.makeText(context, "[실패]기기등록 금지", Toast.LENGTH_SHORT).show();
-                                        } else if(response.code() == 404){
-                                            Toast.makeText(context, "[Error]", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Toast.makeText(context, "[실패]response에 아무것도 없습니다.", Toast.LENGTH_SHORT).show();
+                                            try {
+                                                String result = response.body().string();
+                                                JSONObject jsonObject = new JSONObject(result);
+                                                int mloId = jsonObject.getInt("mloId");
+                                                mlosArrayList.add(new Mlos((long) mloId,registerMloName.getText().toString()));
+                                                Toast.makeText(context,result, Toast.LENGTH_SHORT).show();
+                                            } catch (IOException | JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
                                     @Override
