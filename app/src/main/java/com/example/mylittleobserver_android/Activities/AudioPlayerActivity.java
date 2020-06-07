@@ -92,20 +92,20 @@ public class AudioPlayerActivity extends AppCompatActivity {
         // Log.i("hello_FuckingAlarmId",alarmId.toString());
 
         // View
-        TextView title = (TextView)findViewById(R.id.audio_text);
-        seekBar = (SeekBar)findViewById(R.id.seekbar);
-        Late = (AppCompatImageButton)findViewById(R.id.late);
-        pause = (AppCompatImageButton)findViewById(R.id.pause);
-        start = (AppCompatImageButton)findViewById(R.id.audio_start);
-        restart = (AppCompatImageButton)findViewById(R.id.restart);
-        fast = (AppCompatImageButton)findViewById(R.id.fast);
+        TextView title = (TextView) findViewById(R.id.audio_text);
+        seekBar = (SeekBar) findViewById(R.id.seekbar);
+        Late = (AppCompatImageButton) findViewById(R.id.late);
+        pause = (AppCompatImageButton) findViewById(R.id.pause);
+        start = (AppCompatImageButton) findViewById(R.id.audio_start);
+        restart = (AppCompatImageButton) findViewById(R.id.restart);
+        fast = (AppCompatImageButton) findViewById(R.id.fast);
         startMinute = findViewById(R.id.startminute);
         startSec = findViewById(R.id.startsec);
         endMinute = findViewById(R.id.endminute);
         endSec = findViewById(R.id.endsec);
 
         // toolbar
-        Toolbar toolbar = (Toolbar)findViewById(R.id.audioPlayerToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.audioPlayerToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("녹음 내용");
@@ -123,17 +123,17 @@ public class AudioPlayerActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try{
-                    if(response.body() == null){
+                try {
+                    if (response.body() == null) {
                         Toast.makeText(AudioPlayerActivity.this, "파일이 없습니다 잠시만 기다려주세요", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     String result = response.body().string();
                     JSONObject jsonObject = new JSONObject(result);
                     fileDownloadUrl = jsonObject.getString("fileDownloadUrl");
-                    Log.v("FuckUp!",fileDownloadUrl);
-                    Log.d("END Data",result);
-                }catch (IOException | JSONException e) {
+                    Log.v("FuckUp!", fileDownloadUrl);
+                    Log.d("END Data", result);
+                } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -145,14 +145,13 @@ public class AudioPlayerActivity extends AppCompatActivity {
         });
 
 
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // seekbar touch하는 순간의 이벤트
                 // progress는 seekbar가 진행된데 까지의 과정을 담은 인스턴스
                 // fromUser는 사용자가 움직이면 true, 아니면 false의 값을 가지게 된다.
-                if(fromUser) {
+                if (fromUser) {
                     mediaPlayer.seekTo(progress);
                 }
             }
@@ -173,12 +172,12 @@ public class AudioPlayerActivity extends AppCompatActivity {
         Late.setOnClickListener(v -> {
 
         });
-        start.setOnClickListener(v ->{
+        start.setOnClickListener(v -> {
             start.setVisibility(View.INVISIBLE);
             pause.setVisibility(View.VISIBLE);
             // mediaplayer
             try {
-                if(fileDownloadUrl == null){
+                if (fileDownloadUrl == null) {
                     Toast.makeText(this, "파일이 없습니다", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -194,8 +193,8 @@ public class AudioPlayerActivity extends AppCompatActivity {
             seekBar.setMax(a);
             isPlaying = true;
             new MusicThread().start();
-            startSec.setText("0"+timer_sec);
-            startMinute.setText("0"+timer_minute);
+            startSec.setText("0" + timer_sec);
+            startMinute.setText("0" + timer_minute);
         });
         pause.setOnClickListener(v -> {
             pause.setVisibility(View.INVISIBLE);
@@ -205,7 +204,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
             isPlaying = false;
             start_and_pause = true;
         });
-        restart.setOnClickListener(v ->{
+        restart.setOnClickListener(v -> {
             pause.setVisibility(View.VISIBLE);
             start.setVisibility(View.INVISIBLE);
             restart.setVisibility(View.INVISIBLE);
@@ -223,7 +222,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
     class MusicThread extends Thread {
         @Override
         public void run() {
-            while(isPlaying) {
+            while (isPlaying) {
                 seekBar.setProgress(mediaPlayer.getCurrentPosition());
 
             }
@@ -232,19 +231,17 @@ public class AudioPlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId())
-        {
-            case android.R.id.home :
-                if(isPlaying == false){
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (isPlaying == false) {
                     finish();
-                    overridePendingTransition(R.anim.sliding_up,R.anim.sliding_down);
-                }
-                else {
+                    overridePendingTransition(R.anim.sliding_up, R.anim.sliding_down);
+                } else {
                     isPlaying = false;
                     mediaPlayer.stop();
                     mediaPlayer.release();
                     finish();
-                    overridePendingTransition(R.anim.sliding_up,R.anim.sliding_down);
+                    overridePendingTransition(R.anim.sliding_up, R.anim.sliding_down);
                 }
         }
         return super.onOptionsItemSelected(item);

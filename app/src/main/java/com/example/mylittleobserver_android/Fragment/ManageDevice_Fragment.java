@@ -28,16 +28,17 @@ public class ManageDevice_Fragment extends Fragment {
     // api/v1/mlos/{mloName}/alarms -> mloName에 따라 알람의 상태를 알 수 있다.
 
     MainActivity activity;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_manage,container,false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_manage, container, false);
 
         // view
         MaterialButton button = root.findViewById(R.id.testbutton);

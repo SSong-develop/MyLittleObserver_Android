@@ -16,12 +16,12 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.splash);
 
         Handler hd = new Handler();
-        hd.postDelayed(new splashhandler(),1500);
+        hd.postDelayed(new splashhandler(), 1500);
     }
 
-    private class splashhandler implements Runnable{
-        public void run(){
-            startActivity(new Intent(SplashActivity.this,AddDeviceActivity.class));
+    private class splashhandler implements Runnable {
+        public void run() {
+            startActivity(new Intent(SplashActivity.this, AddDeviceActivity.class));
             finish();
         }
     }

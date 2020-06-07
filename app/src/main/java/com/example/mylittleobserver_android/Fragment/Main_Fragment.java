@@ -29,16 +29,16 @@ public class Main_Fragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
     }
 
     // http 통신 필요
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_main,container,false);
-        TextView userName = (TextView)root.findViewById(R.id.username);
-        ImageView Profile = (ImageView)root.findViewById(R.id.profile);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_main, container, false);
+        TextView userName = (TextView) root.findViewById(R.id.username);
+        ImageView Profile = (ImageView) root.findViewById(R.id.profile);
         toolbar = root.findViewById(R.id.main_toolbar);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle(" ");

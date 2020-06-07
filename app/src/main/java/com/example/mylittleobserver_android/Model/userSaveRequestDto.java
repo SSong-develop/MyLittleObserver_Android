@@ -7,7 +7,7 @@ public class userSaveRequestDto {
     String username;
 
     public userSaveRequestDto(String username) {
-    this.username = username;
+        this.username = username;
     }
 
     public String getUsername() {

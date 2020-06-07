@@ -8,9 +8,11 @@ import com.example.mylittleobserver_android.Model.mloSaveRequestDto;
 import java.net.URL;
 import java.util.List;
 
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -39,13 +41,18 @@ public interface Service {
 
     @GET
     Call<ResponseBody> login(@Url String url);
+
     @GET
     Call<ResponseBody> getAlarm(@Url String url);
+
     @GET
     Call<ResponseBody> getAlarmStatus(@Url String url);
+
     @GET
     Call<ResponseBody> getMloList(@Url String url);
 
+    @DELETE("api/v1/alarms/{alarmId}")
+    Call<ResponseBody> deleteAlarms(@Path("alarmId") String alarmId);
     // http://ipAddress:portNum/users?mloId = mloId 이렇게 데이터를 가져오면 될거같음
 
     // http://ipAddress:portNum/user

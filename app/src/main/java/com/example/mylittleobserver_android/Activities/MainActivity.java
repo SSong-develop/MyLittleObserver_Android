@@ -103,11 +103,10 @@ public class MainActivity extends AppCompatActivity {
     private Call<ResponseBody> mloRegisterCall;
 
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             }
@@ -132,42 +131,40 @@ public class MainActivity extends AppCompatActivity {
         // Shared Preference
         // this part need to develop
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // getIntent
         Intent intent = getIntent();
-        int userId = intent.getExtras().getInt("userId");
+        /*int userId = intent.getExtras().getInt("userId");*/
         String userName = intent.getExtras().getString("userName");
         ArrayList<Mlos> mlosArrayList = intent.getParcelableArrayListExtra("mloList");
-        /*Log.d("Fuck",String.valueOf(mlosArrayList.get(1).getMloName()));*/
         ArrayList<String> mloNameList = new ArrayList<>();
-        for(int i = 0; i < mlosArrayList.size();i++) {
+        for (int i = 0; i < mlosArrayList.size(); i++) {
             String mloName = mlosArrayList.get(i).getMloName();
-            Log.d("TAG",mloName);
+            Log.d("TAG", mloName);
             mloNameList.add(mloName);
         }
 
 
         // FCM Token
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("getInstanceId failed", task.getException());
-                            return;
-                        }
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("getInstanceId failed", task.getException());
+                    return;
+                }
 
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
 
-                        // Log and Toast
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("Fucking_FCM_TOKEN", msg);
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // Log and Toast
+                String msg = getString(R.string.msg_token_fmt, token);
+                Log.d("Fucking_FCM_TOKEN", msg);
+                /*Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();*/
+            }
+        });
 
 
         // Navigation DrawerView
@@ -194,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
                     builder.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            registerName = (TextInputEditText)dialogView.findViewById(R.id.register_mlo);
-                            registerMloName = (TextInputEditText)dialogView.findViewById(R.id.register_mloName);
+                            registerName = (TextInputEditText) dialogView.findViewById(R.id.register_mlo);
+                            registerMloName = (TextInputEditText) dialogView.findViewById(R.id.register_mloName);
                             mloSaveRequestDto _mloSaveRequestDto = new mloSaveRequestDto(registerMloName.getText().toString());
                             String _registerName = registerName.getText().toString();
 
@@ -206,12 +203,12 @@ public class MainActivity extends AppCompatActivity {
                             } else if (!TextUtils.equals(registerName.getText().toString(), userName)) {
                                 Toast.makeText(context, "[실패]유저이름과 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
-                            } else if(TextUtils.isEmpty(registerMloName.getText().toString())){
+                            } else if (TextUtils.isEmpty(registerMloName.getText().toString())) {
                                 Toast.makeText(context, "[실패]기기 이름을 적어주세요", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
-                            } else{
+                            } else {
                                 // mloRegister Model
-                                MloRegister _mloRegister = new MloRegister(_registerName,_mloSaveRequestDto);
+                                MloRegister _mloRegister = new MloRegister(_registerName, _mloSaveRequestDto);
 
                                 // 기기 등록 api 호출
                                 mloRegisterRetrofit = new Retrofit.Builder()
@@ -219,26 +216,27 @@ public class MainActivity extends AppCompatActivity {
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 mloRegisterService = mloRegisterRetrofit.create(Service.class);
-                                mloRegisterCall = mloRegisterService.mloRegister(_registerName,_mloSaveRequestDto);
-                                Log.v("Fuck_register",_registerName);
-                                Log.d("Fuck Retrofit",mloRegisterCall.toString());
+                                mloRegisterCall = mloRegisterService.mloRegister(_registerName, _mloSaveRequestDto);
+                                Log.v("Fuck_register", _registerName);
+                                Log.d("Fuck Retrofit", mloRegisterCall.toString());
                                 mloRegisterCall.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if(!response.isSuccessful()){
+                                        if (!response.isSuccessful()) {
                                             Toast.makeText(context, "[실패]기기등록 실패", Toast.LENGTH_SHORT).show();
                                         } else {
                                             try {
                                                 String result = response.body().string();
                                                 JSONObject jsonObject = new JSONObject(result);
                                                 int mloId = jsonObject.getInt("mloId");
-                                                mlosArrayList.add(new Mlos((long) mloId,registerMloName.getText().toString()));
-                                                Toast.makeText(context,result, Toast.LENGTH_SHORT).show();
+                                                mlosArrayList.add(new Mlos((long) mloId, registerMloName.getText().toString()));
+                                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
                                         }
                                     }
+
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
@@ -256,16 +254,15 @@ public class MainActivity extends AppCompatActivity {
                     });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-                }
-                else if(id == R.id.mloSelect){
+                } else if (id == R.id.mloSelect) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setIcon(R.drawable.ic_launcher_foreground);
                     alertBuilder.setTitle("기기를 선택하세요");
 
                     final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            context,android.R.layout.select_dialog_item
+                            context, android.R.layout.select_dialog_item
                     );
-                    for(int i = 0 ;i <mlosArrayList.size();i++){
+                    for (int i = 0; i < mlosArrayList.size(); i++) {
                         adapter.add(mlosArrayList.get(i).getMloName());
                     }
                     alertBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -281,28 +278,26 @@ public class MainActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     String selectedMloName;
                                     selectedMloName = String.valueOf(adapter.getItem(which));
-                                    if(which == 0){ // 첫번째 꺼
-                                       Bundle bundle = new Bundle();
-                                       bundle.putString("userName",userName);
-                                       bundle.putString("mloName",selectedMloName);
-                                       Long mloId = null;
-                                       for(int i = 0 ;i<mlosArrayList.size();i++){
-                                           if(TextUtils.equals(selectedMloName,String.valueOf(mlosArrayList.get(i).getMloName()))){
-                                               mloId = Long.valueOf(String.valueOf(mlosArrayList.get(i).getMloId()));
-                                           }
-                                           else {
-                                               /*Toast.makeText(context, "기기값이 없습니다.", Toast.LENGTH_SHORT).show();*/
-                                           }
-                                       }
-                                       bundle.putLong("mloId",mloId);
-                                       mainfragment.setArguments(bundle);
-                                       audiofragment.setArguments(bundle);
-                                    }
-                                    else if(which == 1){ // 두번째 꺼
+                                    if (which == 0) { // 첫번째 꺼
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("userName", userName);
+                                        bundle.putString("mloName", selectedMloName);
+                                        Long mloId = null;
+                                        for (int i = 0; i < mlosArrayList.size(); i++) {
+                                            if (TextUtils.equals(selectedMloName, String.valueOf(mlosArrayList.get(i).getMloName()))) {
+                                                mloId = Long.valueOf(String.valueOf(mlosArrayList.get(i).getMloId()));
+                                            } else {
+                                                /*Toast.makeText(context, "기기값이 없습니다.", Toast.LENGTH_SHORT).show();*/
+                                            }
+                                        }
+                                        bundle.putLong("mloId", mloId);
+                                        mainfragment.setArguments(bundle);
+                                        audiofragment.setArguments(bundle);
+                                    } else if (which == 1) { // 두번째 꺼
                                         _switch = false;
                                     }
                                     AlertDialog.Builder innBuilder = new AlertDialog.Builder(context);
-                                    innBuilder.setMessage(selectedMloName +"선택하셨습니다");
+                                    innBuilder.setMessage(selectedMloName + "선택하셨습니다");
                                     innBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -319,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         });
         // Main Fragment__bundle
         Bundle bundle1 = new Bundle();
-        bundle1.putString("userName",userName);
+        bundle1.putString("userName", userName);
         /*bundle1.putString("mloName",mloName);*/
         /*bundle1.putLong("mloId",mloId);*/
         mainfragment.setArguments(bundle1);
@@ -327,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
         // Audio Fragment__bundle
         Bundle bundle = new Bundle();
         /*bundle.putString("mloName",mloName);*/
-        bundle.putString("userName",userName);
+        bundle.putString("userName", userName);
         /*bundle.putLong("mloId",mloId);*/
         audiofragment.setArguments(bundle);
 

@@ -3,7 +3,7 @@ package com.example.mylittleobserver_android.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class User implements Parcelable{
+public class User implements Parcelable {
     Long userId;
     String name;
     Mlos mlos;
@@ -22,8 +22,9 @@ public class User implements Parcelable{
         this.name = name;
         this.mlos = mlos;
     }
+
     // 객체를 받아올때 호출
-    public User(Parcel in){
+    public User(Parcel in) {
         userId = in.readLong();
         name = in.readString();
     }
@@ -39,6 +40,7 @@ public class User implements Parcelable{
             return new User[size];
         }
     };
+
     @Override
     public int describeContents() {
         return 0;

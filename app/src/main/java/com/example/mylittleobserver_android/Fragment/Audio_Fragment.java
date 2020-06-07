@@ -74,18 +74,18 @@ public class Audio_Fragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup)inflater.inflate(R.layout.fragment_audio,container,false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_audio, container, false);
         // View
         SwipeRefreshLayout mSwipeRefreshLayout = root.findViewById(R.id.swipe_layout);
 
         // toolbar
-        Toolbar tb = (Toolbar)root.findViewById(R.id.audioToolbar_fragment);
+        Toolbar tb = (Toolbar) root.findViewById(R.id.audioToolbar_fragment);
         activity.setSupportActionBar(tb);
         activity.getSupportActionBar().setTitle("녹음파일 목록");
 
@@ -97,7 +97,7 @@ public class Audio_Fragment extends Fragment {
 
         // convert url
         String _url = url + "/api/v1/mlos/" + mloName;
-        Log.d("convert_url",_url);
+        Log.d("convert_url", _url);
 
         // alarmView구성을 위한 Retrofit
         alarmRetrofit = new Retrofit.Builder()
@@ -110,8 +110,8 @@ public class Audio_Fragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 String result = null;
-                if(response.isSuccessful()){
-                    try{
+                if (response.isSuccessful()) {
+                    try {
                         result = response.body().string();
                         // Json 처리 객체
                         JSONArray jsonArray = new JSONArray(result);
@@ -121,7 +121,7 @@ public class Audio_Fragment extends Fragment {
                         ArrayList<JSONObject> listAlarm = new ArrayList<>();
 
                         // View 구성
-                        for(int i = 0;i<jsonArray1.length();i++){
+                        for (int i = 0; i < jsonArray1.length(); i++) {
                             listAlarm.add(jsonArray1.getJSONObject(i));
                             initdata(listAlarm.get(i));
                         }
@@ -133,9 +133,9 @@ public class Audio_Fragment extends Fragment {
                             @Override
                             public void onItemClick(View v, int pos) {
                                 Intent intent = new Intent(activity, AudioPlayerActivity.class);
-                                alarmId = Long.valueOf(pos)+1;
-                                intent.putExtra("SelectedTitle",mainAdapter.getTitle(pos));
-                                intent.putExtra("alarmId",alarmId);
+                                alarmId = Long.valueOf(pos) + 1;
+                                intent.putExtra("SelectedTitle", mainAdapter.getTitle(pos));
+                                intent.putExtra("alarmId", alarmId);
                                 // 여기를 조져야한다.
                                 startActivity(intent);
                             }
@@ -151,7 +151,7 @@ public class Audio_Fragment extends Fragment {
                         audioRecyclerView.setAdapter(mainAdapter);
 
                         DividerItemDecoration dividerItemDecoration =
-                                new DividerItemDecoration(audioRecyclerView.getContext(),new LinearLayoutManager(activity).getOrientation());
+                                new DividerItemDecoration(audioRecyclerView.getContext(), new LinearLayoutManager(activity).getOrientation());
                         audioRecyclerView.addItemDecoration(dividerItemDecoration);
                         _switch = false;
 
@@ -161,15 +161,14 @@ public class Audio_Fragment extends Fragment {
                     catch (IOException e) {
                         e.printStackTrace();
                     } // IOException
-                }
-                else {
+                } else {
                     Toast.makeText(activity, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -187,8 +186,8 @@ public class Audio_Fragment extends Fragment {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         String result = null;
-                        if(response.isSuccessful()){
-                            try{
+                        if (response.isSuccessful()) {
+                            try {
                                 result = response.body().string();
                                 // Json 처리 객체
                                 JSONArray jsonArray = new JSONArray(result);
@@ -198,7 +197,7 @@ public class Audio_Fragment extends Fragment {
                                 ArrayList<JSONObject> listAlarm = new ArrayList<>();
 
                                 // View 구성
-                                for(int i = 0;i<jsonArray1.length();i++){
+                                for (int i = 0; i < jsonArray1.length(); i++) {
                                     listAlarm.add(jsonArray1.getJSONObject(i));
                                     initdata(listAlarm.get(i));
                                 }
@@ -210,9 +209,9 @@ public class Audio_Fragment extends Fragment {
                                     @Override
                                     public void onItemClick(View v, int pos) {
                                         Intent intent = new Intent(activity, AudioPlayerActivity.class);
-                                        alarmId = Long.valueOf(pos)+1;
-                                        intent.putExtra("SelectedTitle",mainAdapter.getTitle(pos));
-                                        intent.putExtra("alarmId",alarmId);
+                                        alarmId = Long.valueOf(pos) + 1;
+                                        intent.putExtra("SelectedTitle", mainAdapter.getTitle(pos));
+                                        intent.putExtra("alarmId", alarmId);
                                         // 여기를 조져야한다.
                                         startActivity(intent);
                                     }
@@ -228,7 +227,7 @@ public class Audio_Fragment extends Fragment {
                                 audioRecyclerView.setAdapter(mainAdapter);
 
                                 DividerItemDecoration dividerItemDecoration =
-                                        new DividerItemDecoration(audioRecyclerView.getContext(),new LinearLayoutManager(activity).getOrientation());
+                                        new DividerItemDecoration(audioRecyclerView.getContext(), new LinearLayoutManager(activity).getOrientation());
                                 audioRecyclerView.addItemDecoration(dividerItemDecoration);
                                 _switch = false;
 
@@ -238,15 +237,14 @@ public class Audio_Fragment extends Fragment {
                             catch (IOException e) {
                                 e.printStackTrace();
                             } // IOException
-                        }
-                        else {
+                        } else {
                             Toast.makeText(activity, response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -276,21 +274,21 @@ public class Audio_Fragment extends Fragment {
             SimpleDateFormat old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             old_format.setTimeZone(TimeZone.getTimeZone("KST"));
             SimpleDateFormat new_format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
-            try{
+            try {
                 Date old_date = old_format.parse(date);
                 new_date = new_format.format(old_date).substring(14);
-                since = new_format.format(old_date).substring(6,13);
-            } catch (ParseException e){
+                since = new_format.format(old_date).substring(6, 13);
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             // Subalert title
             // subList로 오는 거 이름
-            if(TextUtils.equals(heart,"testhigh")){
+            if (TextUtils.equals(heart, "testhigh")) {
                 title = "(Test)심박수 위험";
-            } else if (TextUtils.equals(decibel,"testhigh")) {
+            } else if (TextUtils.equals(decibel, "testhigh")) {
                 title = "(Test)데시벨 위험";
-            } else if (TextUtils.equals(tumble,"testfall")){
+            } else if (TextUtils.equals(tumble, "testfall")) {
                 title = "(Test)넘어짐";
             }
 
@@ -324,8 +322,8 @@ public class Audio_Fragment extends Fragment {
             // sectionItems가 시간대에 따라서 분류가 되어야 한다는 것이다.
             String sectionName = since;
             ArrayList<InsideItem> sectionItems = new ArrayList<>();
-            sectionItems.add(new InsideItem(stAlarmId,title,new_date));
-            sectionList.add(new Section(sectionName,sectionItems));
+            sectionItems.add(new InsideItem(stAlarmId, title, new_date));
+            sectionList.add(new Section(sectionName, sectionItems));
 
         } catch (JSONException e) {
             e.printStackTrace();

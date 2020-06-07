@@ -7,8 +7,7 @@ public class MainRecyclerViewItem {
     String Decibel;
     String Warningword;
 
-    public MainRecyclerViewItem()
-    {
+    public MainRecyclerViewItem() {
 
     }
 

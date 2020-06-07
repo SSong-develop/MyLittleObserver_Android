@@ -8,7 +8,7 @@ public class Section {
     private String sectionName;
     private ArrayList<InsideItem> sectionItems;
 
-    public Section(){
+    public Section() {
 
     }
 

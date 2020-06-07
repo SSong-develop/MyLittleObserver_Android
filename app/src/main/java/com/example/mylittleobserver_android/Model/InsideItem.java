@@ -6,7 +6,7 @@ public class InsideItem {
     String date; // date
 
 
-    public InsideItem(){
+    public InsideItem() {
 
     }
 

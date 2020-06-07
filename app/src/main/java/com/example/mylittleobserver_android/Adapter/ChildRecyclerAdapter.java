@@ -24,6 +24,7 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView alarmTitle;
         TextView time;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             alarmTitle = itemView.findViewById(R.id.alarm_title);
@@ -35,7 +36,7 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
     @NonNull
     @Override
     public ChildRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.inside_recyclerview_layout,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.inside_recyclerview_layout, parent, false);
         ChildRecyclerAdapter.ViewHolder vh = new ChildRecyclerAdapter.ViewHolder(v);
         return vh;
     }

@@ -19,38 +19,48 @@ import com.example.mylittleobserver_android.Model.InsideItem;
 import com.example.mylittleobserver_android.Model.MainRecyclerViewItem;
 import com.example.mylittleobserver_android.Model.Section;
 import com.example.mylittleobserver_android.R;
+import com.example.mylittleobserver_android.Retrofit.Service;
+import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder> {
+    String URL = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
+
     // 커스텀 리스너 인터페이스
-    public interface OnItemClickListener
-    {
-        void onItemClick(View v,int pos);
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
     }
-    public interface OnItemLongClickListener
-    {
-        void onItemLongClick(View v,int pos);
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View v, int pos);
     }
 
     // 리스너 객체 참조를 저장하는 변수
     private MainRecyclerAdapter.OnItemClickListener mListener = null;
     private MainRecyclerAdapter.OnItemLongClickListener mLongListener = null;
-    public void setOnItemClickListener(MainRecyclerAdapter.OnItemClickListener listener)
-    {
+
+    public void setOnItemClickListener(MainRecyclerAdapter.OnItemClickListener listener) {
         this.mListener = listener;
     }
-    public void setOnItemLongClickListener(MainRecyclerAdapter.OnItemLongClickListener listener)
-    {
+
+    public void setOnItemLongClickListener(MainRecyclerAdapter.OnItemLongClickListener listener) {
         this.mLongListener = listener;
     }
 
     ArrayList<Section> sectionList;
     private Context context;
 
-    public MainRecyclerAdapter(ArrayList<Section> sectionList){
+    public MainRecyclerAdapter(ArrayList<Section> sectionList) {
         this.sectionList = sectionList;
     }
 
@@ -58,6 +68,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         TextView sectionName;
         RecyclerView childRecyclerView;
         TextView buttonViewOption;
+        int pos;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,10 +79,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION)
-                    {
-                        mListener.onItemClick(v,pos);
+                    pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(v, pos);
                     }
                 }
             });
@@ -79,19 +89,19 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
                 @Override
                 public boolean onLongClick(View v) {
                     int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION)
-                    {
-                        mLongListener.onItemLongClick(v,pos);
+                    if (pos != RecyclerView.NO_POSITION) {
+                        mLongListener.onItemLongClick(v, pos);
                     }
                     return true;
                 }
             });
         }
     }
+
     @NonNull
     @Override
     public MainRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_row,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_row, parent, false);
         MainRecyclerAdapter.ViewHolder vh = new MainRecyclerAdapter.ViewHolder(v);
         context = parent.getContext();
         return vh;
@@ -126,7 +136,23 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
                             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                    Retrofit deleteRetrofit = new Retrofit.Builder()
+                                            .baseUrl(URL)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+                                    Service deleteService = deleteRetrofit.create(Service.class);
+                                    Call<ResponseBody> call = deleteService.deleteAlarms(String.valueOf(position));
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Toast.makeText(context, "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                        }
+                                    });
                                 }
                             });
                             builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -153,8 +179,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         return sectionList.size();
     }
 
-    public String getTitle(int position)
-    {
+    public String getTitle(int position) {
         String title = sectionList.get(position).getSectionName();
         return title;
     }

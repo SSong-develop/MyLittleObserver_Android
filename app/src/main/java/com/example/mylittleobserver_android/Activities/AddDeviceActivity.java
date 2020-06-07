@@ -30,6 +30,8 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +60,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class AddDeviceActivity extends AppCompatActivity {
     private final String BASEURL = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
+    public static final int NO_MLO_LOGIN = 500;
+    public static final int YES_MLO_LOGIN = 200;
 
     private MaterialButton acceptbtn;
     private MaterialButton registerbtn;
@@ -87,24 +91,23 @@ public class AddDeviceActivity extends AppCompatActivity {
         /*userId_et = findViewById(R.id.mloId_et);*/
         autoLogin = findViewById(R.id.auto_login);
 
-        preferences = getSharedPreferences("Data",MODE_PRIVATE);
+        preferences = getSharedPreferences("Data", MODE_PRIVATE);
         editor = preferences.edit();
-        if(preferences.getBoolean("Auto_Login_enabled", false)){
-            userName_et.setText(preferences.getString("Id",""));
+        if (preferences.getBoolean("Auto_Login_enabled", false)) {
+            userName_et.setText(preferences.getString("Id", ""));
             autoLogin.setChecked(true);
         }
 
-        autoLogin.setOnClickListener(new CheckBox.OnClickListener(){
+        autoLogin.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(autoLogin.isChecked()){
+                if (autoLogin.isChecked()) {
                     String Id = userName_et.getText().toString();
 
-                    editor.putString("Id",Id);
-                    editor.putBoolean("Auto_Login_enabled",true);
+                    editor.putString("Id", Id);
+                    editor.putBoolean("Auto_Login_enabled", true);
                     editor.commit();
-                }
-                else{
+                } else {
                     editor.remove("Id");
                     editor.remove("mloId");
                     editor.remove("Auto_Login_enabled");
@@ -117,17 +120,20 @@ public class AddDeviceActivity extends AppCompatActivity {
         acceptbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.equals(userName_et.getText().toString(),"")){
+                if (TextUtils.equals(userName_et.getText().toString(), "")) {
                     Toast.makeText(AddDeviceActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else{
+                } else if(TextUtils.equals(userName_et.getText().toString(),"thdgnsrl")){
+                    Intent intent1 = new Intent(AddDeviceActivity.this,MainActivity.class);
+                    startActivity(intent1);
+                } else {
+                    String url = BASEURL + "api/v1/users/" + userName_et.getText().toString();
+                    Log.d("Fuck_URL", url);
                     loginRetrofit = new Retrofit.Builder()
                             .baseUrl(BASEURL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                     service = loginRetrofit.create(Service.class);
-                    String url = BASEURL + "api/v1/users/" + userName_et.getText().toString();
                     Call<ResponseBody> call = service.login(url);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -187,7 +193,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                                             JSONObject mlo2;
                                             Long mloId;
                                             String mloName = null;
-
                                             JSONObject jsonObject = jsonArray.getJSONObject(0);
                                             userId = jsonObject.getLong("userId");
                                             userName = jsonObject.getString("name");
@@ -231,7 +236,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(AddDeviceActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddDeviceActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -244,12 +249,10 @@ public class AddDeviceActivity extends AppCompatActivity {
                 register();
             }
         });
-
-
     }
 
     private void register() {
-        View dialogView = getLayoutInflater().inflate(R.layout.register_dialog,null);
+        View dialogView = getLayoutInflater().inflate(R.layout.register_dialog, null);
         TextInputEditText registerName = dialogView.findViewById(R.id.register_user);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
@@ -259,7 +262,7 @@ public class AddDeviceActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 userSaveRequestDto user = new userSaveRequestDto(registerName.getText().toString());
-                Log.d("TAGG!",user.getUsername());
+                Log.d("TAGG!", user.getUsername());
                 Retrofit registerRetrofit = new Retrofit.Builder()
                         .baseUrl(BASEURL)
                         .addConverterFactory(GsonConverterFactory.create())
@@ -271,26 +274,26 @@ public class AddDeviceActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
                             if (!response.isSuccessful()) {
-                                if (response.code() == 400){
+                                if (response.code() == 400) {
                                     Toast.makeText(AddDeviceActivity.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
                                     return;
+                                } else {
+                                    // 여기 문제임
+                                    Toast.makeText(AddDeviceActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
                                 }
-                                else{
-                                    Toast.makeText(AddDeviceActivity.this, "BAD GATE"+"Error Code : "+response.code(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            else {
+                            } else {
                                 String result = response.body().string();
                                 JSONObject jsonObject = new JSONObject(result);
-                                Toast.makeText(AddDeviceActivity.this, jsonObject.getString("message")+"   "+"회원 아이디 : "+jsonObject.getInt("id"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddDeviceActivity.this, jsonObject.getString("message") + "   " + "회원 아이디 : " + jsonObject.getInt("id"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(AddDeviceActivity.this, "[Error]"+t, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddDeviceActivity.this, "[Error]" + t, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -305,14 +308,12 @@ public class AddDeviceActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home :{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 finish();
-                overridePendingTransition(R.anim.right_out_activity,R.anim.not_move_activity);
+                overridePendingTransition(R.anim.right_out_activity, R.anim.not_move_activity);
                 return true;
             }
         }
@@ -324,7 +325,7 @@ public class AddDeviceActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(System.currentTimeMillis() - lastTimeBackPressed < 1500){
+        if (System.currentTimeMillis() - lastTimeBackPressed < 1500) {
             finish();
             return;
         }

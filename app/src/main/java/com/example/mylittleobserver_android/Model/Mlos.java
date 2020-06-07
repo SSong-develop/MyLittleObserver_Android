@@ -46,7 +46,7 @@ public class Mlos implements Parcelable {
     }
 
     @SuppressWarnings("rawtypes")
-    public static final Parcelable.Creator<Mlos> CREATOR = new Parcelable.Creator<Mlos>(){
+    public static final Parcelable.Creator<Mlos> CREATOR = new Parcelable.Creator<Mlos>() {
 
         @Override
         public Mlos createFromParcel(Parcel source) {
