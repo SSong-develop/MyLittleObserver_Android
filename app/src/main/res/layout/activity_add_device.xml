@@ -34,7 +34,7 @@
             android:layout_height="50dp"
             android:id="@+id/acceptbtn"
             android:layout_marginTop="20dp"
-            android:text="확인"
+            android:text="로그인"
             android:padding="2dp"
             android:layout_gravity="center"/>
 

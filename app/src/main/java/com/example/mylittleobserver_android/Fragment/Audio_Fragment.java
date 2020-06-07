@@ -87,7 +87,7 @@ public class Audio_Fragment extends Fragment {
         // toolbar
         Toolbar tb = (Toolbar) root.findViewById(R.id.audioToolbar_fragment);
         activity.setSupportActionBar(tb);
-        activity.getSupportActionBar().setTitle("녹음파일 목록");
+        activity.getSupportActionBar().setTitle("알림 목록");
 
         // MainActivity Bundle
         Bundle bundle = getArguments();
@@ -284,12 +284,12 @@ public class Audio_Fragment extends Fragment {
 
             // Subalert title
             // subList로 오는 거 이름
-            if (TextUtils.equals(heart, "testhigh")) {
-                title = "(Test)심박수 위험";
-            } else if (TextUtils.equals(decibel, "testhigh")) {
-                title = "(Test)데시벨 위험";
-            } else if (TextUtils.equals(tumble, "testfall")) {
-                title = "(Test)넘어짐";
+            if (TextUtils.equals(heart, "high")) {
+                title = "심박수 위험";
+            } else if (TextUtils.equals(decibel, "high")) {
+                title = "데시벨 위험";
+            } else if (TextUtils.equals(tumble, "fall")) {
+                title = "넘어짐";
             }
 
             /*

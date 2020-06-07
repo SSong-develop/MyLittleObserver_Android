@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -230,7 +231,10 @@ public class MainActivity extends AppCompatActivity {
                                                 JSONObject jsonObject = new JSONObject(result);
                                                 int mloId = jsonObject.getInt("mloId");
                                                 mlosArrayList.add(new Mlos((long) mloId, registerMloName.getText().toString()));
-                                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                                                // Toast 가독성을 위해서 위치를 위로 옮김
+                                                Toast toast = Toast.makeText(context, result, Toast.LENGTH_SHORT);
+                                                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
+                                                toast.show();
                                             } catch (IOException | JSONException e) {
                                                 e.printStackTrace();
                                             }
