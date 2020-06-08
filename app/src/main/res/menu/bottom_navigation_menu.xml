@@ -12,13 +12,7 @@
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:icon="@drawable/playlist_play_white_"
-        android:title="녹음 파일"/>
-    <item
-        android:id="@+id/menu_three"
-        app:showAsAction="ifRoom"
-        android:enabled="true"
-        android:icon="@drawable/devices_white"
-        android:title="기기 관리"/>
+        android:title="알림 파일"/>
     <item
         android:id="@+id/menu_four"
         app:showAsAction="ifRoom"

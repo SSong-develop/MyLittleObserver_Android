@@ -140,7 +140,8 @@ public class AddDeviceActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             try {
-                                if(TextUtils.equals(response.body().string(),"No mlo")){
+                                String result1 = response.body().string();
+                                if(TextUtils.equals(result1,"No mlo")){
                                     // response.body().string = No mlo
                                     // No mlo라는 녀석이 보내진다면 ArrayList를 생성하지 않는다~
                                     // 이 부분을 판단해 줄 녀석이 필요함
@@ -151,107 +152,50 @@ public class AddDeviceActivity extends AppCompatActivity {
                                     intent.putParcelableArrayListExtra("mloList",mlosArrayList);
                                     startActivity(intent);
                                     finish();
-
-                                }
-                                else {
+                                } else if(response.body() == null){
+                                    Toast.makeText(AddDeviceActivity.this, "등록된 회원이 아닙니다. 회원가입을 해주세요.", Toast.LENGTH_SHORT).show();
+                                    return;
+                                } else{
                                     // 성공
-                                    try {
-                                        String result = response.body().string();
-                                        try{
-                                            JSONArray jsonArray = new JSONArray(result);
-                                            int userId;
-                                            String name;
-                                            JSONArray mloList;
-                                            JSONObject mlos = jsonArray.getJSONObject(0);
-                                            userId = mlos.getInt("userId");
-                                            name = mlos.getString("name");
-                                            mloList = mlos.getJSONArray("mlos");
-                                            ArrayList<Mlos> mlosArrayList = new ArrayList<>();
+                                    try{
+                                        JSONArray jsonArray = new JSONArray(result1);
+                                        int userId;
+                                        String name;
+                                        JSONArray mloList;
+                                        JSONObject mlos = jsonArray.getJSONObject(0);
+                                        userId = mlos.getInt("userId");
+                                        name = mlos.getString("name");
+                                        mloList = mlos.getJSONArray("mlos");
+                                        ArrayList<Mlos> mlosArrayList = new ArrayList<>();
 
-                                            if(mloList == null){
-                                                Toast.makeText(AddDeviceActivity.this, "로그인 성공, 기계를 등록해주세요", Toast.LENGTH_SHORT).show();
-                                            }
-                                            else {
-                                                for(int i = 0 ; i<mloList.length();i++){
-                                                    Mlos mlo = new Mlos(mloList.getJSONObject(i).getLong("mloId"),mloList.getJSONObject(i).getString("mloName"));
-                                                    mlosArrayList.add(mlo);
-                                                    // mloNameList(0) = mlo1
-                                                    // mloNameList(1) = mlo2
-                                                }
-                                                Intent intent = new Intent(AddDeviceActivity.this,MainActivity.class);
-                                                intent.putExtra("userName",name);
-                                                intent.putExtra("userId",userId);
-                                                intent.putParcelableArrayListExtra("mloList",mlosArrayList);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        if(mloList == null){
+                                            Toast.makeText(AddDeviceActivity.this, "로그인 성공, 기계를 등록해주세요", Toast.LENGTH_SHORT).show();
                                         }
-                                    } catch (IOException e) {
+                                        else {
+                                            for(int i = 0 ; i<mloList.length();i++){
+                                                Mlos mlo = new Mlos(mloList.getJSONObject(i).getLong("mloId"),mloList.getJSONObject(i).getString("mloName"));
+                                                mlosArrayList.add(mlo);
+                                                // mloNameList(0) = mlo1
+                                                // mloNameList(1) = mlo2
+                                            }
+                                            Intent intent = new Intent(AddDeviceActivity.this,MainActivity.class);
+                                            intent.putExtra("userName",name);
+                                            intent.putExtra("userId",userId);
+                                            intent.putParcelableArrayListExtra("mloList",mlosArrayList);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            /*try{
-                                String result = response.body().string();
-                                        Log.v("Test",result);
-                                        try{
-                                            JSONArray jsonArray = new JSONArray(result);
-                                            // 만약 사람이 많아지면 반복문으로 수정
-                                            Long userId;
-                                            String userName;
-                                            JSONArray mlos;
-                                            JSONObject mlo1;
-                                            JSONObject mlo2;
-                                            Long mloId;
-                                            String mloName = null;
-                                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                            userId = jsonObject.getLong("userId");
-                                            userName = jsonObject.getString("name");
-                                            mlos = jsonObject.getJSONArray("mlos"); // 2개의 mlo들을 받아와
-                                            mlo1 = mlos.getJSONObject(0);
-                                            mlo2 = mlos.getJSONObject(1);
-                                            if(TextUtils.equals(userName_et.getText().toString(),"userA")){
-                                                if(TextUtils.equals(userName,userName_et.getText().toString())
-                                                        &&TextUtils.equals(userId_et.getText().toString(),String.valueOf(mlo1.getLong("mloId"))))
-                                                {
-                                                    Toast.makeText(AddDeviceActivity.this, "mlo1 : LoginSucess", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(AddDeviceActivity.this,MainActivity.class);
-                                                    intent.putExtra("userName",userName);
-                                                    intent.putExtra("mloName",mlo1.getString("mloName"));
-                                                    intent.putExtra("mloId",mlo1.getLong("mloId"));
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
-                                                else if(TextUtils.equals(userName,userName_et.getText().toString())
-                                                        &&TextUtils.equals(userId_et.getText().toString(),String.valueOf(mlo2.getLong("mloId"))))
-                                                {
-                                                    Toast.makeText(AddDeviceActivity.this, "mlo2 : LoginSucess", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(AddDeviceActivity.this,MainActivity.class);
-                                                    intent.putExtra("userName",userName);
-                                                    intent.putExtra("mloName",mlo2.getString("mloName"));
-                                                    intent.putExtra("mloId",mlo2.getLong("mloId"));
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
-                                                else
-                                                {
-                                                    Toast.makeText(AddDeviceActivity.this, "Wrong username else mloId", Toast.LENGTH_SHORT).show();
-                                                }
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }catch(Exception e){
-                                e.printStackTrace();
-                            }*/
                         }
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(AddDeviceActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddDeviceActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -296,7 +240,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                                     // 여기 문제임
                                     // 원래 error : code 500 Bad Gate 표시나옴
                                     // Toast 가독성을 위해서 위치를 변경
-                                    Toast toast = Toast.makeText(AddDeviceActivity.this,"회원가입 성공",Toast.LENGTH_LONG);
+                                    Toast toast = Toast.makeText(AddDeviceActivity.this,"error : code 500 Bad Gate" + response.code(),Toast.LENGTH_LONG);
                                     toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
                                     toast.show();
                                 }

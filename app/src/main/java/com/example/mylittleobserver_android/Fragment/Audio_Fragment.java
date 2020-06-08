@@ -284,11 +284,11 @@ public class Audio_Fragment extends Fragment {
 
             // Subalert title
             // subList로 오는 거 이름
-            if (TextUtils.equals(heart, "high")) {
+            if (TextUtils.equals(heart, "testhigh")) {
                 title = "심박수 위험";
-            } else if (TextUtils.equals(decibel, "high")) {
-                title = "데시벨 위험";
-            } else if (TextUtils.equals(tumble, "fall")) {
+            } else if (TextUtils.equals(decibel, "testhigh")) {
+                title = "소리 위험";
+            } else if (TextUtils.equals(tumble, "testfall")) {
                 title = "넘어짐";
             }
 
@@ -315,11 +315,6 @@ public class Audio_Fragment extends Fragment {
                 title = "(Test)넘어짐 위험";
             }
             */
-
-            // 구현해야 할 것
-            // 초 단위에 따라서 위험한 것을 밑에 달리도록 해야한다.
-            // 그렇다면 먼저 해주어야 할 것은
-            // sectionItems가 시간대에 따라서 분류가 되어야 한다는 것이다.
             String sectionName = since;
             ArrayList<InsideItem> sectionItems = new ArrayList<>();
             sectionItems.add(new InsideItem(stAlarmId, title, new_date));

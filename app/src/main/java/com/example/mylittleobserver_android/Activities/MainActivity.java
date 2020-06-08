@@ -26,7 +26,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mylittleobserver_android.Fragment.Audio_Fragment;
 import com.example.mylittleobserver_android.Fragment.Main_Fragment;
-import com.example.mylittleobserver_android.Fragment.ManageDevice_Fragment;
 import com.example.mylittleobserver_android.Fragment.Setting_Fragment;
 import com.example.mylittleobserver_android.Model.InsideItem;
 import com.example.mylittleobserver_android.Model.MloRegister;
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     Main_Fragment mainfragment = new Main_Fragment();
     Audio_Fragment audiofragment = new Audio_Fragment();
     Setting_Fragment settingfragment = new Setting_Fragment();
-    ManageDevice_Fragment manageDevice_Fragment = new ManageDevice_Fragment();
 
     // URL
     String URL = "http://ec2-15-165-113-25.ap-northeast-2.compute.amazonaws.com:8080/";
@@ -84,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText registerMloName;
 
     private boolean _switch = true;
+    private String userName = null;
+    private String default_mloName = null;
 
     // mloListRetrofit
     private Retrofit mloListRetrofit;
@@ -129,6 +129,12 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.fast_rewind_white); //뒤로가기 버튼 아이콘
         mDrawerLayout = findViewById(R.id.drawerlayout);
 
+        // Bundle
+        Bundle bundle = new Bundle();
+        Bundle bundle1 = new Bundle();
+        Bundle bundle2 = new Bundle();
+        Bundle bundle3 = new Bundle();
+
         // Shared Preference
         // this part need to develop
         SharedPreferences sharedPreferences = context.getSharedPreferences(
@@ -138,14 +144,23 @@ public class MainActivity extends AppCompatActivity {
         // getIntent
         Intent intent = getIntent();
         /*int userId = intent.getExtras().getInt("userId");*/
-        String userName = intent.getExtras().getString("userName");
+        userName = intent.getExtras().getString("userName");
         ArrayList<Mlos> mlosArrayList = intent.getParcelableArrayListExtra("mloList");
-        ArrayList<String> mloNameList = new ArrayList<>();
-        for (int i = 0; i < mlosArrayList.size(); i++) {
-            String mloName = mlosArrayList.get(i).getMloName();
+            ArrayList<String> mloNameList = new ArrayList<>();
+            for (int i = 0; i < mlosArrayList.size(); i++) {
+                String mloName = mlosArrayList.get(i).getMloName();
             Log.d("TAG", mloName);
             mloNameList.add(mloName);
         }
+
+        // Retrofit
+        // MLO AlarmList 가져오기
+        /*Retrofit mloNameRetrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+            Service mloService = mloNameRetrofit.create(Service.class);
+            Call<ResponseBody> call2 = mloService.*/
 
 
         // FCM Token
@@ -167,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // Navigation DrawerView
         // MLO등록 Must do something
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -188,65 +202,48 @@ public class MainActivity extends AppCompatActivity {
                     View dialogView = getLayoutInflater().inflate(R.layout.register_mlo_register, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setView(dialogView);
-                    builder.setTitle("기계등록").setMessage("사용자 닉네임과 기기이름을 적어주세요");
+                    builder.setTitle("기계등록").setMessage("기기이름을 입력해주세요");
                     builder.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            registerName = (TextInputEditText) dialogView.findViewById(R.id.register_mlo);
                             registerMloName = (TextInputEditText) dialogView.findViewById(R.id.register_mloName);
                             mloSaveRequestDto _mloSaveRequestDto = new mloSaveRequestDto(registerMloName.getText().toString());
-                            String _registerName = registerName.getText().toString();
 
-                            // Exception
-                            if (TextUtils.isEmpty(registerName.getText().toString())) {
-                                Toast.makeText(context, "[실패]유저이름을 적어주세요", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            } else if (!TextUtils.equals(registerName.getText().toString(), userName)) {
-                                Toast.makeText(context, "[실패]유저이름과 일치하지 않습니다", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            } else if (TextUtils.isEmpty(registerMloName.getText().toString())) {
-                                Toast.makeText(context, "[실패]기기 이름을 적어주세요", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            } else {
-                                // mloRegister Model
-                                MloRegister _mloRegister = new MloRegister(_registerName, _mloSaveRequestDto);
+                            MloRegister _mloRegister = new MloRegister(userName, _mloSaveRequestDto);
 
-                                // 기기 등록 api 호출
-                                mloRegisterRetrofit = new Retrofit.Builder()
-                                        .baseUrl(URL)
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-                                mloRegisterService = mloRegisterRetrofit.create(Service.class);
-                                mloRegisterCall = mloRegisterService.mloRegister(_registerName, _mloSaveRequestDto);
-                                Log.v("Fuck_register", _registerName);
-                                Log.d("Fuck Retrofit", mloRegisterCall.toString());
-                                mloRegisterCall.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if (!response.isSuccessful()) {
-                                            Toast.makeText(context, "[실패]기기등록 실패", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            try {
-                                                String result = response.body().string();
-                                                JSONObject jsonObject = new JSONObject(result);
-                                                int mloId = jsonObject.getInt("mloId");
-                                                mlosArrayList.add(new Mlos((long) mloId, registerMloName.getText().toString()));
-                                                // Toast 가독성을 위해서 위치를 위로 옮김
-                                                Toast toast = Toast.makeText(context, result, Toast.LENGTH_SHORT);
-                                                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
-                                                toast.show();
-                                            } catch (IOException | JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                            // 기기 등록 api 호출
+                            mloRegisterRetrofit = new Retrofit.Builder()
+                                    .baseUrl(URL)
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            mloRegisterService = mloRegisterRetrofit.create(Service.class);
+                            mloRegisterCall = mloRegisterService.mloRegister(userName, _mloSaveRequestDto);
+                            mloRegisterCall.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (!response.isSuccessful()) {
+                                        Toast.makeText(context, "[실패]기기등록 실패", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        try {
+                                            String result = response.body().string();
+                                            JSONObject jsonObject = new JSONObject(result);
+                                            int mloId = jsonObject.getInt("mloId");
+                                            mlosArrayList.add(new Mlos((long) mloId, registerMloName.getText().toString()));
+                                            // Toast 가독성을 위해서 위치를 위로 옮김
+                                            Toast toast = Toast.makeText(context, result, Toast.LENGTH_SHORT);
+                                            toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                                            toast.show();
+                                        } catch (IOException | JSONException e) {
+                                            e.printStackTrace();
                                         }
                                     }
+                                }
 
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                                    }
-                                });
-                            }
+                                }
+                            });
                         }
                     });
                     builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -305,6 +302,11 @@ public class MainActivity extends AppCompatActivity {
                                     innBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            bundle2.putString("userName",userName);
+                                            bundle2.putString("mloName",selectedMloName);
+                                            mainfragment.setArguments(bundle2);
+                                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                            ft.detach(mainfragment).attach(mainfragment).commit();
                                             dialog.dismiss();
                                         }
                                     });
@@ -317,16 +319,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Main Fragment__bundle
-        Bundle bundle1 = new Bundle();
         bundle1.putString("userName", userName);
         /*bundle1.putString("mloName",mloName);*/
         /*bundle1.putLong("mloId",mloId);*/
         mainfragment.setArguments(bundle1);
 
         // Audio Fragment__bundle
-        Bundle bundle = new Bundle();
-        /*bundle.putString("mloName",mloName);*/
         bundle.putString("userName", userName);
+        /*bundle.putString("mloName",mloName);*/
         /*bundle.putLong("mloId",mloId);*/
         audiofragment.setArguments(bundle);
 
@@ -368,11 +368,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Retrofit
-        // MLO AlarmList 가져오기
 
-
-        // bottomNavigationView에 따른 화면 전환
 
         getSupportFragmentManager().beginTransaction().replace(R.id.relative_layout, mainfragment).commitAllowingStateLoss();
 
@@ -392,10 +388,6 @@ public class MainActivity extends AppCompatActivity {
                         transaction.replace(R.id.relative_layout, audiofragment).commitAllowingStateLoss();
                         break;
                     }
-                    case R.id.menu_three: {
-                        transaction.replace(R.id.relative_layout, manageDevice_Fragment).commitAllowingStateLoss();
-                        break;
-                    }
                     case R.id.menu_four: {
                         transaction.replace(R.id.relative_layout, settingfragment).commitAllowingStateLoss();
                         break;
@@ -405,5 +397,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }

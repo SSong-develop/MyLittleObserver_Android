@@ -35,21 +35,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null) {
-            String messageTitle = null;
+            String messageTitle = remoteMessage.getNotification().getTitle();
+            String messageBody = remoteMessage.getNotification().getBody();
             Log.d("FCM Log", "알림 메세지 :" + remoteMessage.getNotification().getTitle());
-
-            String messageBody = null;
-            try {
-                messageBody = URLDecoder.decode(remoteMessage.getNotification().getBody(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
             // notification.put("title",~)
             // notification.put("body",여기에다가 high인 것을 넣어달라고 해야함)
             // 내가보기에 서버에서 바디에다가 시간만 넣은 듯 한데, 그걸 이용해서 해야할 것으로 보임
-
-            // 여기부분 해야함
-            messageTitle = "센서가 기준치를 넘었습니다!";
             Intent intent;
             intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

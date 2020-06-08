@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:checked="false"
-            android:text="자동로그인"
+            android:text="아이디 저장"
             android:layout_marginTop="14dp"/>
     </LinearLayout>
 

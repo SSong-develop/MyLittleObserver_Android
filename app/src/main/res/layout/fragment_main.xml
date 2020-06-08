@@ -24,37 +24,77 @@
             android:id="@+id/relate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="100dp"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/profile"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
-                android:padding="5dp"
-                android:layout_centerInParent="true"
                 android:background="@drawable/circle_imageview"
                 android:elevation="2dp"
+                android:padding="5dp"
                 android:src="@drawable/person_outline_white" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/username_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:id="@+id/username"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_below="@+id/profile"
-                android:padding="3dp"
-                android:background="#ffffff"
-                android:elevation="2dp"
-                android:text="thdgnsrl"
-                android:textColor="@android:color/black"
-                android:textSize="20dp"/>
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="100dp"
+                    android:src="@drawable/saram_outline_black" />
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:text="유저"
+                    android:textColor="@android:color/black"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/username_layout"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="100dp"
+                    android:src="@drawable/ic_devices_black_24dp" />
+
+                <TextView
+                    android:id="@+id/mloname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="51dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="35dp"
+                    android:gravity="center"
+                    android:text="MLO이름"
+                    android:textColor="@android:color/black"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
