@@ -12,7 +12,7 @@
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:icon="@drawable/playlist_play_white_"
-        android:title="알림 파일"/>
+        android:title="알림 목록"/>
     <item
         android:id="@+id/menu_four"
         app:showAsAction="ifRoom"

@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                     View dialogView = getLayoutInflater().inflate(R.layout.register_mlo_register, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setView(dialogView);
-                    builder.setTitle("기계등록").setMessage("기기이름을 입력해주세요");
+                    builder.setTitle("기계등록").setMessage("기기 고유번호를 입력해주세요");
                     builder.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

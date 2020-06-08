@@ -19,9 +19,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:inputType="text"
+                android:inputType="number"
                 android:id="@+id/register_mloName"
-                android:hint="기기이름"/>
+                android:hint="기기 고유번호"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </LinearLayout>
