@@ -6,16 +6,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
 import com.example.mylittleobserver_android.Activities.MainActivity;
 import com.example.mylittleobserver_android.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -26,6 +29,17 @@ import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
+    private static final String HEARTWARNING = " Heart warning!!";
+    private static final String DECIBELWARNING = " Decibel warning!!";
+    private static final String TUMBLEWARNING = " Tumble warning!!";
+
+    private SharedPreferences heartpreferences;
+    private SharedPreferences decibelpreferences;
+    private SharedPreferences tumblepreferences;
+
+    private boolean heartBoolean;
+    private boolean decibelBoolean;
+    private boolean tumbleBoolean;
 
     @Override
     public void onNewToken(String token) {
@@ -34,13 +48,45 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        heartpreferences = getSharedPreferences("heart", MODE_PRIVATE);
+        decibelpreferences = getSharedPreferences("decibel", MODE_PRIVATE);
+        tumblepreferences = getSharedPreferences("tumble", MODE_PRIVATE);
+        // 뒤에 true는 key에 해당하는 데이터가 없거나 읽어오는데 실패했을 때 기본으로 얻게될 데이터userA
+        heartBoolean = heartpreferences.getBoolean("heart",true);
+        decibelBoolean = decibelpreferences.getBoolean("decibel", true);
+        tumbleBoolean = tumblepreferences.getBoolean("tumble", true);
+        Log.d("data please!!!", String.valueOf(heartBoolean));
+        Log.d("data2 please!!!", String.valueOf(decibelBoolean));
+        Log.d("data3 please!!!", String.valueOf(tumbleBoolean));
+
+        if(TextUtils.equals(remoteMessage.getNotification().getTitle(),HEARTWARNING) && heartBoolean == false){
+            Log.d("hello!", String.valueOf(TextUtils.equals(remoteMessage.getNotification().getTitle(),HEARTWARNING) && heartBoolean == false));
+            return;
+        }else if(TextUtils.equals(remoteMessage.getNotification().getTitle(),DECIBELWARNING) && decibelBoolean == false){
+            Log.d("hello2!", String.valueOf(TextUtils.equals(remoteMessage.getNotification().getTitle(),DECIBELWARNING) && decibelBoolean == false));
+            return;
+        }else if(TextUtils.equals(remoteMessage.getNotification().getTitle(),TUMBLEWARNING) && tumbleBoolean == false){
+            Log.d("hello3!", String.valueOf(TextUtils.equals(remoteMessage.getNotification().getTitle(),TUMBLEWARNING) && tumbleBoolean == false));
+            return;
+        } else {
+            sendingMessage(remoteMessage);
+        }
+    }
+
+
+    public void sendingMessage(RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null) {
             String messageTitle = remoteMessage.getNotification().getTitle();
             String messageBody = remoteMessage.getNotification().getBody();
             Log.d("FCM Log", "알림 메세지 :" + remoteMessage.getNotification().getTitle());
-            // notification.put("title",~)
-            // notification.put("body",여기에다가 high인 것을 넣어달라고 해야함)
-            // 내가보기에 서버에서 바디에다가 시간만 넣은 듯 한데, 그걸 이용해서 해야할 것으로 보임
+
+            if(TextUtils.equals(messageTitle,HEARTWARNING)){
+                messageTitle = "심박수가 높습니다";
+            }else if(TextUtils.equals(messageTitle,DECIBELWARNING)){
+                messageTitle = "주변소리가 높습니다";
+            }else if(TextUtils.equals(messageTitle,TUMBLEWARNING)){
+                messageTitle = "넘어졌습니다";
+            }
             Intent intent;
             intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -65,4 +111,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.notify(0, notificationBuilder.build());
         }
     }
+
+
 }

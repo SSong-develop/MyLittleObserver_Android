@@ -135,33 +135,17 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle2 = new Bundle();
         Bundle bundle3 = new Bundle();
 
-        // Shared Preference
-        // this part need to develop
-        SharedPreferences sharedPreferences = context.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
         // getIntent
         Intent intent = getIntent();
         /*int userId = intent.getExtras().getInt("userId");*/
         userName = intent.getExtras().getString("userName");
         ArrayList<Mlos> mlosArrayList = intent.getParcelableArrayListExtra("mloList");
-            ArrayList<String> mloNameList = new ArrayList<>();
-            for (int i = 0; i < mlosArrayList.size(); i++) {
-                String mloName = mlosArrayList.get(i).getMloName();
+        ArrayList<String> mloNameList = new ArrayList<>();
+        for (int i = 0; i < mlosArrayList.size(); i++) {
+            String mloName = mlosArrayList.get(i).getMloName();
             Log.d("TAG", mloName);
             mloNameList.add(mloName);
         }
-
-        // Retrofit
-        // MLO AlarmList 가져오기
-        /*Retrofit mloNameRetrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-            Service mloService = mloNameRetrofit.create(Service.class);
-            Call<ResponseBody> call2 = mloService.*/
-
 
         // FCM Token
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -171,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("getInstanceId failed", task.getException());
                     return;
                 }
-
                 // Get new Instance ID token
                 String token = task.getResult().getToken();
 
@@ -302,8 +285,8 @@ public class MainActivity extends AppCompatActivity {
                                     innBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            bundle2.putString("userName",userName);
-                                            bundle2.putString("mloName",selectedMloName);
+                                            bundle2.putString("userName", userName);
+                                            bundle2.putString("mloName", selectedMloName);
                                             mainfragment.setArguments(bundle2);
                                             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                                             ft.detach(mainfragment).attach(mainfragment).commit();
@@ -318,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
         // Main Fragment__bundle
         bundle1.putString("userName", userName);
         /*bundle1.putString("mloName",mloName);*/
@@ -329,6 +313,8 @@ public class MainActivity extends AppCompatActivity {
         /*bundle.putString("mloName",mloName);*/
         /*bundle.putLong("mloId",mloId);*/
         audiofragment.setArguments(bundle);
+
+        // Setting Fragment__bundle
 
         // Retrofit
         // MLO List가져오기
@@ -367,8 +353,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
 
         getSupportFragmentManager().beginTransaction().replace(R.id.relative_layout, mainfragment).commitAllowingStateLoss();
 
